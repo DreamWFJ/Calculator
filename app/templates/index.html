@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/icheck/blue.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/bootstrap-tabs-x.min.css') }}"/>
+
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/bootstrap-tabs-x.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/icheck.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrapValidator.min.css') }}" crossorigin="anonymous">
+    <!-- bootstrap validator js -->
+    <script src="{{ url_for('static', filename = 'js/bootstrapValidator.min.js') }}" crossorigin="anonymous"></script>
+    <!-- bootstrap-switch css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrap-switch.min.css') }}" crossorigin="anonymous">
+    <!-- bootstrap-switch js -->
+    <script src="{{ url_for('static', filename = 'js/bootstrap-switch.min.js') }}" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrap-select.min.css') }}" crossorigin="anonymous">
+    <script src="{{ url_for('static', filename = 'js/bootstrap-select.min.js') }}" crossorigin="anonymous"></script>
+    <style type="text/css">
+        body {
+            height: 100%;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #3d3d3d;
+            padding-top: 50px;
+            background-attachment: scroll;
+        }
+        footer {
+            color: #3e3a2f;
+            margin: 0 auto 20px;
+            padding: 15px 0;
+            position: relative;
+            text-align: center;
+            width: 902px;
+            display: block;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('div.tabs-x .nav-tabs [data-toggle="tab"]').on('tabsX.click', function (event, jqXHR, status) {
+                console.log('tabsX.click event');
+            });
+            $('input:radio').iCheck({
+                radioClass: 'iradio_minimal-blue',
+                increaseArea: '20%' // optional
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="row">
+    <div class="col-xs-4 col-md-2"></div>
+    <div class="col-xs-8 col-md-8">
+        <div class='tabs-x tabs-above tab-bordered tabs-krajee'>
+            <ul id="myTab-7" class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#home-7" role="tab" data-toggle="tab" data-url="/site/fetch-tab?tab=1"><i class="glyphicon glyphicon-home"></i>Home</a></li>
+                <li><a href="#profile-7" role="tab-kv" data-toggle="tab" data-url="/site/fetch-tab?tab=2"><i class="glyphicon glyphicon-user"></i>Profile</a></li>
+                <li class="dropdown">
+                    <a href="#" id="myTabDrop-7" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-list-alt"></i>Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop-1">
+                        <li><a href="#dropdown-7-1" tabindex="-1" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-chevron-right"></i>Option 1</a></li>
+                        <li><a href="#dropdown-7-2" tabindex="-1" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-chevron-right"></i>Option 2</a></li>
+                    </ul>
+                </li>
+                <li class="disabled"><a href="#disabled-7"><i class="glyphicon glyphicon-knight"></i>Disabled</a></li>
+            </ul>
+            <div id="myTabContent-7" class="tab-content">
+                <div class="tab-pane fade in active" id="home-7" >
+                    <form class="form-horizontal" action="" method="post">
+                        <div class="form-group" data-toggle="tooltip" title="User's Name">
+                            <label for="inputUsername" class="col-sm-2 control-label">Username</label>
+                            <div class="col-sm-9">
+                                <input  type="radio" name="test" class="form-control" id="inputUsername" value="">
+                                <input  type="radio" name="test" class="form-control" id="inputUsername" value="">
+                            </div>
+                        </div>
+                        <div class="form-group" data-toggle="tooltip" title="User's Real Name">
+                            <label for="inputRealName" class="col-sm-2 control-label">RealName</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="inputRealName">
+                            </div>
+                        </div>
+                        <div class="form-group" data-toggle="tooltip" title="User's Email">
+                            <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" id="inputEmail">
+                            </div>
+                        </div>
+                        <div class="form-group" data-toggle="tooltip" title="User's Telephone Number">
+                            <label for="inputTelephone" class="col-sm-2 control-label">Telephone</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="inputTelephone">
+                            </div>
+                        </div>
+                        <div class="form-group" data-toggle="tooltip" title="User's Identity Card Number">
+                            <label for="inputIdentityCardNumber" class="col-sm-2 control-label">Identity Card Number</label>
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" id="inputIdentityCardNumber">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Last Login</label>
+                            <div class="col-sm-9">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="form-group" data-toggle="tooltip" title="User's Last Login Time">
+                                            <label for="inputLastLoginTime" class="col-sm-2 control-label">Time</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" disabled id="inputLastLoginTime" placeholder="Last Login Time">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" data-toggle="tooltip" title="User's Last Login Address">
+                                            <label for="inputLastLoginAddress" class="col-sm-2 control-label">Address</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" disabled id="inputLastLoginAddress" placeholder="Last Login Address">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" data-toggle="tooltip" title="User's Last Login IP">
+                                            <label for="inputLastLoginIP" class="col-sm-2 control-label">IP</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" disabled id="inputLastLoginIP" placeholder="Last Login IP">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" data-toggle="tooltip" title="User's High Frequency Last Login Address Count">
+                            <label class="col-sm-2 control-label">High Frequency Login Address</label>
+                            <div class="col-sm-9">
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">One</label>
+                                            <div class="col-sm-9">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" disabled placeholder="High Frequency Address One" id="inputHighFrequencyAddressOne">
+                                                    <span class="input-group-addon">9</span>
+                                                    <span class="input-group-addon">Times</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Two</label>
+                                            <div class="col-sm-9">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" disabled placeholder="High Frequency Address Two" id="inputHighFrequencyAddressTwo">
+                                                    <span class="input-group-addon">9</span>
+                                                    <span class="input-group-addon">Times</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Three</label>
+                                            <div class="col-sm-9">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" disabled placeholder="High Frequency Address Three" id="inputHighFrequencyAddressThree">
+                                                    <span class="input-group-addon">30</span>
+                                                    <span class="input-group-addon">Times</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" data-toggle="tooltip" title="User's Total Login Count">
+                            <label for="inputTotalLoginCount" class="col-sm-2 control-label">Total Login Count</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" disabled id="inputTotalLoginCount" placeholder="Total Login Count">
+                            </div>
+                        </div>
+
+                        <div class="form-group" data-toggle="tooltip" title="User's Total Online Time">
+                            <label for="inputTotalOnlineTime" class="col-sm-2 control-label">Total Online Time</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" disabled id="inputTotalOnlineTime" placeholder="Total Online Time">
+                            </div>
+                        </div>
+                        <div class="form-group" data-toggle="tooltip" title="Disable User">
+                            <div class="col-sm-offset-2 col-sm-9">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox"> Disable User
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-9">
+                                <button type="submit" class="btn btn-default">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane fade" id="profile-7">
+                    <h4>Local Initial Data</h4>
+                    This is some initial information. You can click these tabs, to load content via ajax.
+
+                </div>
+                <div class="tab-pane fade" id="dropdown-7-1"><h4>Local Initial Data</h4>
+                    This is some initial information. You can click these tabs, to load content via ajax.</div>
+                <div class="tab-pane fade" id="dropdown-7-2"><p>...</p></div>
+                <div class="tab-pane fade" id="disabled-7">Disabled Content</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-4 col-md-2"></div>
+</div>
+
+<footer>
+    <p> Copyright © 2011 All Rights Reserved. &nbsp;|&nbsp; Developed by <a href="http://www.code-pal.com/">Code-pal</a> &nbsp;|&nbsp; Designed by <a href="http://www.bevelandemboss.net/website-template-iphone-app">BevelAndEmboss.net</a> &nbsp;|&nbsp; <strong>HTML5 &amp; CSS 3.0 </strong> </p>
+</footer>
+<!-- 添加用户的具体实现模块 -->
+<div class="modal fade" id="add_user" tabindex="-1" role="dialog" aria-labelledby="AddUser">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="addUserForm" class="form-horizontal" action="" method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Add User</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group" data-toggle="tooltip" title="Username">
+                                <span class="input-group-addon"><span class="fa fa-user">&nbsp;Name</span></span>
+                                <input type="text" class="form-control" placeholder="Username" name="name">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group" data-toggle="tooltip" title="Email">
+                                <span class="input-group-addon"><span class="fa fa-envelope-o">&nbsp;Email</span></span>
+                                <input type="email" class="form-control" name="email" placeholder="Email">
+                            </div><!-- /input-group -->
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group" data-toggle="tooltip" title="Password">
+                                <span class="input-group-addon"><span class="fa fa-key"></span>&nbsp;Password</span>
+                                <input class="form-control" placeholder="******" name="password" type="password">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group" data-toggle="tooltip" title="Repeat-Password">
+                                <span class="input-group-addon"><span class="fa fa-key">&nbsp;Repeat-Password</span></span>
+                                <input class="form-control" placeholder="******" name="repeat_password" type="password">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
