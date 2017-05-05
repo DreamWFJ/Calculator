@@ -1,0 +1,188 @@
+<!--贷款计算器-->
+<form id="loanCalculatedForm" class="form-horizontal" action="{{ url_for('main.calculate_loan') }}" method="post">
+    <div class="panel panel-default">
+        <div class="panel-heading">Please Input</div>
+        <div class="form-group" data-toggle="tooltip" title="Loan Type" style="margin-top: 20px;">
+            <label for="inputLoanType" class="col-sm-2 control-label">Loan Type</label>
+            <div class="col-sm-9">
+                <ul class="list-group" style="list-style: none">
+                    <li>
+                        <input tabindex="1" type="radio" id="business-loan" name="loan-type">
+                        <label for="business-loan">Business</label>
+                    </li>
+                    <li>
+                        <input tabindex="2" type="radio" id="public-accumulation-funds-loan" name="loan-type">
+                        <label for="public-accumulation-funds-loan">Public Accumulation Funds</label>
+                    </li>
+                    <li>
+                        <input tabindex="3" type="radio" id="mixture-loan" name="loan-type">
+                        <label for="mixture-loan">Mixture</label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group" data-toggle="tooltip" title="Compute Mode">
+            <label for="inputComputeMode" class="col-sm-2 control-label">Compute Mode</label>
+            <div class="col-sm-9">
+                <input id="inputComputeMode" name="compute-mode" checked type="checkbox" />
+            </div>
+        </div>
+        <div class="form-group" data-toggle="tooltip" title="">
+            <div class="col-sm-offset-2 col-sm-9">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-group" data-toggle="tooltip" title="User's Last Login Time">
+                            <label for="inputLastLoginTime" class="col-sm-2 control-label">Area</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="inputLastLoginTime">
+                            </div>
+                        </div>
+                        <div class="form-group" data-toggle="tooltip" title="User's Last Login Address">
+                            <label for="inputLastLoginAddress" class="col-sm-2 control-label">Unit Price</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="inputLastLoginAddress">
+                            </div>
+                        </div>
+                        <div class="form-group" data-toggle="tooltip" title="User's Last Login IP">
+                            <!--按揭百分比-->
+                            <label for="inputLastLoginIP" class="col-sm-2 control-label">Mortgage Percentage</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="inputLastLoginIP">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" data-toggle="tooltip" title="">
+            <div class="col-sm-offset-2 col-sm-9">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-group" data-toggle="tooltip" title="Total Loan">
+                            <!--贷款总额-->
+                            <label for="inputLastLoginTime" class="col-sm-2 control-label">Total Loan</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="inputLastLoginTime">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--贷款年限-->
+        <div class="form-group" data-toggle="tooltip" title="User's Email">
+            <label for="inputEmail" class="col-sm-2 control-label">Mortgage Year</label>
+            <div class="col-sm-9">
+                <input type="email" class="form-control" id="inputEmail">
+            </div>
+        </div>
+        <!--贷款利率-->
+        <div class="form-group" data-toggle="tooltip" title="Loan Rate">
+            <label for="inputTelephone" class="col-sm-2 control-label">Loan Rate</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="inputTelephone">
+            </div>
+        </div>
+        <!--还款方式-->
+        <div class="form-group" data-toggle="tooltip" title="Repayment Mode">
+            <label for="inputRepaymentMode" class="col-sm-2 control-label">Repayment Mode</label>
+            <div class="col-sm-9">
+                <input id="inputRepaymentMode" name="repayment-mode" checked type="checkbox" />
+            </div>
+        </div>
+
+        <div class="panel-footer">
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-9">
+                    <div class="btn-toolbar pull-right">
+                        <button type="reset" class="btn btn-primary">Reset</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ShowCalculateResult">modal</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- 计算结果模块 -->
+<div class="modal fade" id="ShowCalculateResult" tabindex="-1" role="dialog" aria-labelledby="Show The Result Of Calculation">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Show The Result Of Calculation</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-group row">
+                            <label for="inputHomeTotalNumbers" class="col-sm-3 control-label">Home Total Nums</label>
+                            <div class="col-sm-8">
+                                <input type="text" readonly class="form-control" id="inputHomeTotalNumbers" name="home-total-nums">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputLoanTotalNumbers" class="col-sm-3 control-label">Loan Total Nums</label>
+                            <div class="col-sm-8">
+                                <input type="text" readonly class="form-control" id="inputLoanTotalNumbers" name="loan-total-nums">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputReplaymentTotalNumbers" class="col-sm-3 control-label">Replayment Total Nums</label>
+                            <div class="col-sm-8">
+                                <input type="text" readonly class="form-control" id="inputReplaymentTotalNumbers" name="replayment-total-nums">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputPaymentInterest" class="col-sm-3 control-label">Payment Interest</label>
+                            <div class="col-sm-8">
+                                <!--偿还利息-->
+                                <input type="text" readonly class="form-control" id="inputPaymentInterest" name="payment-interest">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputInitialPayment" class="col-sm-3 control-label">Initial Payment</label>
+                            <div class="col-sm-8">
+                                <!--首期付款-->
+                                <input type="text" readonly class="form-control" id="inputInitialPayment" name="initial-payment">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputTermsDurationOfLoan" class="col-sm-3 control-label">Terms Duration of Loan</label>
+                            <div class="col-sm-8">
+                                <!--贷款月数-->
+                                <input type="text" readonly class="form-control" id="inputTermsDurationOfLoan" name="terms-duration-of-loan">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputAverageMonthlyRepayment" class="col-sm-3 control-label">Average Monthly Repayment</label>
+                            <div class="col-sm-8">
+                                <input type="text" readonly class="form-control" id="inputAverageMonthlyRepayment" name="average-monthly-repayment">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Print</button>
+                <div class="export btn-group dropup">
+                    <button class="btn btn-default dropdown-toggle" aria-label="export type" title="Export data" data-toggle="dropdown" type="button">
+                        <i class="glyphicon glyphicon-export icon-share"></i>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="menuitem" data-type="pdf"><a href="javascript:void(0)">PDF</a></li>
+                        <li role="menuitem" data-type="word"><a href="javascript:void(0)">Word</a></li>
+                        <li role="menuitem" data-type="txt"><a href="javascript:void(0)">TXT</a></li>
+                        <li role="menuitem" data-type="json"><a href="javascript:void(0)">JSON</a></li>
+                        <li role="menuitem" data-type="excel"><a href="javascript:void(0)">MS-Excel</a></li>
+                        <li role="menuitem" data-type="xml"><a href="javascript:void(0)">XML</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

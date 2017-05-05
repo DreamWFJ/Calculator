@@ -4,22 +4,33 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/icheck/blue.css') }}"/>
+
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/bootstrap-tabs-x.min.css') }}"/>
 
     <script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename = 'js/bootstrap.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename = 'js/bootstrap-tabs-x.min.js') }}"></script>
+    <!--单选和radio的js css-->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/icheck/square/_all.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/icheck/line/_all.css') }}"/>
     <script type="text/javascript" src="{{ url_for('static', filename = 'js/icheck.min.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrapValidator.min.css') }}" crossorigin="anonymous">
     <!-- bootstrap validator js -->
-    <script src="{{ url_for('static', filename = 'js/bootstrapValidator.min.js') }}" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/bootstrapValidator.min.js') }}" crossorigin="anonymous"></script>
     <!-- bootstrap-switch css -->
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrap-switch.min.css') }}" crossorigin="anonymous">
     <!-- bootstrap-switch js -->
-    <script src="{{ url_for('static', filename = 'js/bootstrap-switch.min.js') }}" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/bootstrap-switch.min.js') }}" crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrap-select.min.css') }}" crossorigin="anonymous">
-    <script src="{{ url_for('static', filename = 'js/bootstrap-select.min.js') }}" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/bootstrap-select.min.js') }}" crossorigin="anonymous"></script>
+    <!--遮罩使用的 js 和 css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/jquery.mloading.css') }}" crossorigin="anonymous">
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.mloading.js') }}" crossorigin="anonymous"></script>
+    <!-- bootstrap validator css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrapValidator.min.css') }}" crossorigin="anonymous">
+    <!-- bootstrap validator js -->
+    <script type="text/javascript" src="{{ url_for('static', filename = 'js/bootstrapValidator.min.js') }}" crossorigin="anonymous"></script>
     <style type="text/css">
         body {
             height: 100%;
@@ -40,13 +51,109 @@
     </style>
     <script type="text/javascript">
         $(document).ready(function() {
+            $("#tabs-container").tabsX({
+                enableCache: true,
+                maxTitleLength: 10
+            });
             $('div.tabs-x .nav-tabs [data-toggle="tab"]').on('tabsX.click', function (event, jqXHR, status) {
                 console.log('tabsX.click event');
             });
             $('input:radio').iCheck({
-                radioClass: 'iradio_minimal-blue',
+                radioClass: 'iradio_square-green',
                 increaseArea: '20%' // optional
             });
+            $("[name='compute-mode']").bootstrapSwitch({
+                onText: 'Area & Price',
+                offText: 'Total Loan',
+                size:'normal',
+                onColor:'primary',
+                offColor:'info',
+                handleWidth: 100
+            });
+            $("[name='repayment-mode']").bootstrapSwitch({
+                //等额本息
+                onText: 'Fixed-payment Mortgage',
+                //等额本金
+                offText: 'Fixed-basis Mortgage',
+                size:'normal',
+                onColor:'primary',
+                offColor:'info',
+                handleWidth: 100
+            });
+
+            $('#loanCalculatedForm')
+                    .bootstrapValidator({
+                        message: 'This value is not valid',
+                        feedbackIcons: {
+                            valid: 'glyphicon glyphicon-ok',
+                            invalid: 'glyphicon glyphicon-remove',
+                            validating: 'glyphicon glyphicon-refresh'
+                        },
+                        fields: {
+                            username: {
+                                message: 'The username is not valid',
+                                validators: {
+                                    notEmpty: {
+                                        message: 'The username is required and can\'t be empty'
+                                    },
+                                    stringLength: {
+                                        min: 6,
+                                        max: 30,
+                                        message: 'The username must be more than 6 and less than 30 characters long'
+                                    },
+                                    /*remote: {
+                                     url: 'remote.php',
+                                     message: 'The username is not available'
+                                     },*/
+                                    regexp: {
+                                        regexp: /^[a-zA-Z0-9_\.]+$/,
+                                        message: 'The username can only consist of alphabetical, number, dot and underscore'
+                                    }
+                                }
+                            },
+                            email: {
+                                validators: {
+                                    notEmpty: {
+                                        message: 'The email address is required and can\'t be empty'
+                                    },
+                                    emailAddress: {
+                                        message: 'The input is not a valid email address'
+                                    }
+                                }
+                            },
+                            password: {
+                                validators: {
+                                    notEmpty: {
+                                        message: 'The password is required and can\'t be empty'
+                                    }
+                                }
+                            }
+                        }
+                    })
+                    .on('success.form.bv', function(e) {
+                        // Prevent form submission
+                        e.preventDefault();
+                        $("body").mLoading({
+                text:"Calculating ...",//加载文字，默认值：加载中...
+                //icon:"",//加载图标，默认值：一个小型的base64的gif图片
+                html:false,//设置加载内容是否是html格式，默认值是false
+                content:"",//忽略icon和text的值，直接在加载框中显示此值
+                mask:true//是否显示遮罩效果，默认显示
+            });
+                        // Get the form instance
+                        var $form = $(e.target);
+
+                        // Get the BootstrapValidator instance
+                        var bv = $form.data('bootstrapValidator');
+
+                        // Use Ajax to submit form data
+                        $.post($form.attr('action'), $form.serialize(), function(result) {
+                            console.log('the result is: ');
+                            console.log(result);
+                            $("body").mLoading("hide");
+                            $("#ShowCalculateResult").modal('show');
+                        }, 'json');
+                    });
         });
     </script>
 </head>
@@ -54,10 +161,17 @@
 <div class="row">
     <div class="col-xs-4 col-md-2"></div>
     <div class="col-xs-8 col-md-8">
-        <div class='tabs-x tabs-above tab-bordered tabs-krajee'>
-            <ul id="myTab-7" class="nav nav-tabs" role="tablist">
-                <li class="active"><a href="#home-7" role="tab" data-toggle="tab" data-url="/site/fetch-tab?tab=1"><i class="glyphicon glyphicon-home"></i>Home</a></li>
-                <li><a href="#profile-7" role="tab-kv" data-toggle="tab" data-url="/site/fetch-tab?tab=2"><i class="glyphicon glyphicon-user"></i>Profile</a></li>
+        <div id="tabs-container" class='tabs-x tabs-above tab-bordered tabs-krajee'>
+            <ul id="tabForCalculator" class="nav nav-tabs" role="tablist">
+                <li class="active">
+                    <a href="#home-loan-calculator" role="tab" data-toggle="tab" data-url="/site/fetch-tab?tab=1">
+                        <i class="glyphicon glyphicon-home"></i>Loan
+                    </a>
+                </li>
+                <li><a href="#public-accumulation-funds-calculator" role="tab-kv" data-toggle="tab" data-url="/site/fetch-tab?tab=2"><i class="glyphicon glyphicon-user"></i>Profile</a></li>
+                <li><a href="#prepayment-calculator" role="tab-kv" data-toggle="tab" data-url="/site/fetch-tab?tab=2"><i class="glyphicon glyphicon-user"></i>Profile</a></li>
+                <li><a href="#home-affordability-calculator" role="tab-kv" data-toggle="tab" data-url="/site/fetch-tab?tab=2"><i class="glyphicon glyphicon-user"></i>Profile</a></li>
+
                 <li class="dropdown">
                     <a href="#" id="myTabDrop-7" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-list-alt"></i>Dropdown <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop-1">
@@ -65,151 +179,21 @@
                         <li><a href="#dropdown-7-2" tabindex="-1" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-chevron-right"></i>Option 2</a></li>
                     </ul>
                 </li>
-                <li class="disabled"><a href="#disabled-7"><i class="glyphicon glyphicon-knight"></i>Disabled</a></li>
             </ul>
-            <div id="myTabContent-7" class="tab-content">
-                <div class="tab-pane fade in active" id="home-7" >
-                    <form class="form-horizontal" action="" method="post">
-                        <div class="form-group" data-toggle="tooltip" title="User's Name">
-                            <label for="inputUsername" class="col-sm-2 control-label">Username</label>
-                            <div class="col-sm-9">
-                                <input  type="radio" name="test" class="form-control" id="inputUsername" value="">
-                                <input  type="radio" name="test" class="form-control" id="inputUsername" value="">
-                            </div>
-                        </div>
-                        <div class="form-group" data-toggle="tooltip" title="User's Real Name">
-                            <label for="inputRealName" class="col-sm-2 control-label">RealName</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" id="inputRealName">
-                            </div>
-                        </div>
-                        <div class="form-group" data-toggle="tooltip" title="User's Email">
-                            <label for="inputEmail" class="col-sm-2 control-label">Email</label>
-                            <div class="col-sm-9">
-                                <input type="email" class="form-control" id="inputEmail">
-                            </div>
-                        </div>
-                        <div class="form-group" data-toggle="tooltip" title="User's Telephone Number">
-                            <label for="inputTelephone" class="col-sm-2 control-label">Telephone</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" id="inputTelephone">
-                            </div>
-                        </div>
-                        <div class="form-group" data-toggle="tooltip" title="User's Identity Card Number">
-                            <label for="inputIdentityCardNumber" class="col-sm-2 control-label">Identity Card Number</label>
-                            <div class="col-sm-9">
-                                <input type="email" class="form-control" id="inputIdentityCardNumber">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">Last Login</label>
-                            <div class="col-sm-9">
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                        <div class="form-group" data-toggle="tooltip" title="User's Last Login Time">
-                                            <label for="inputLastLoginTime" class="col-sm-2 control-label">Time</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" disabled id="inputLastLoginTime" placeholder="Last Login Time">
-                                            </div>
-                                        </div>
-                                        <div class="form-group" data-toggle="tooltip" title="User's Last Login Address">
-                                            <label for="inputLastLoginAddress" class="col-sm-2 control-label">Address</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" disabled id="inputLastLoginAddress" placeholder="Last Login Address">
-                                            </div>
-                                        </div>
-                                        <div class="form-group" data-toggle="tooltip" title="User's Last Login IP">
-                                            <label for="inputLastLoginIP" class="col-sm-2 control-label">IP</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" class="form-control" disabled id="inputLastLoginIP" placeholder="Last Login IP">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group" data-toggle="tooltip" title="User's High Frequency Last Login Address Count">
-                            <label class="col-sm-2 control-label">High Frequency Login Address</label>
-                            <div class="col-sm-9">
-                                <div class="panel panel-default">
-                                    <div class="panel-body">
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label">One</label>
-                                            <div class="col-sm-9">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" disabled placeholder="High Frequency Address One" id="inputHighFrequencyAddressOne">
-                                                    <span class="input-group-addon">9</span>
-                                                    <span class="input-group-addon">Times</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label">Two</label>
-                                            <div class="col-sm-9">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" disabled placeholder="High Frequency Address Two" id="inputHighFrequencyAddressTwo">
-                                                    <span class="input-group-addon">9</span>
-                                                    <span class="input-group-addon">Times</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label">Three</label>
-                                            <div class="col-sm-9">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" disabled placeholder="High Frequency Address Three" id="inputHighFrequencyAddressThree">
-                                                    <span class="input-group-addon">30</span>
-                                                    <span class="input-group-addon">Times</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group" data-toggle="tooltip" title="User's Total Login Count">
-                            <label for="inputTotalLoginCount" class="col-sm-2 control-label">Total Login Count</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" disabled id="inputTotalLoginCount" placeholder="Total Login Count">
-                            </div>
-                        </div>
-
-                        <div class="form-group" data-toggle="tooltip" title="User's Total Online Time">
-                            <label for="inputTotalOnlineTime" class="col-sm-2 control-label">Total Online Time</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" disabled id="inputTotalOnlineTime" placeholder="Total Online Time">
-                            </div>
-                        </div>
-                        <div class="form-group" data-toggle="tooltip" title="Disable User">
-                            <div class="col-sm-offset-2 col-sm-9">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox"> Disable User
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-9">
-                                <button type="submit" class="btn btn-default">Save</button>
-                            </div>
-                        </div>
-                    </form>
+            <div id="tabForCalculatorContent" class="tab-content">
+                <div class="tab-pane fade in active" id="home-loan-calculator" >
+                    {% include "_home_loan.html" %}
                 </div>
-                <div class="tab-pane fade" id="profile-7">
-                    <h4>Local Initial Data</h4>
-                    This is some initial information. You can click these tabs, to load content via ajax.
-
+                <div class="tab-pane fade" id="public-accumulation-funds-calculator" >
+                    {% include "_public_accumulation_funds.html" %}
                 </div>
-                <div class="tab-pane fade" id="dropdown-7-1"><h4>Local Initial Data</h4>
-                    This is some initial information. You can click these tabs, to load content via ajax.</div>
-                <div class="tab-pane fade" id="dropdown-7-2"><p>...</p></div>
-                <div class="tab-pane fade" id="disabled-7">Disabled Content</div>
+                <div class="tab-pane fade" id="prepayment-calculator" >
+                    {% include "_prepayment.html" %}
+                </div>
+                <div class="tab-pane fade" id="home-affordability-calculator" >
+                    {% include "_home_affordability.html" %}
+                </div>
+
             </div>
         </div>
     </div>
