@@ -1,2 +1,257 @@
 <!--公积金贷款计算器-->
-<p>待添加</p>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var spouse_monthly_deposit = $('#spouse-for-monthly-deposit');
+        $("input[name='marital-status']")
+                .bootstrapSwitch({
+                    onText: 'Single',
+                    offText: 'Married',
+                    size:'normal',
+                    onColor:'primary',
+                    offColor:'info'
+                })
+                .on('switchChange.bootstrapSwitch', function(event, state) {
+                    if(state){
+                        spouse_monthly_deposit.addClass('hide in');
+
+                    }else {
+                        spouse_monthly_deposit.removeClass('hide in');
+                    }
+                })
+                .end();
+        $("[name='room-type']").bootstrapSwitch({
+            //等额本息
+            onText: 'Policy-related',
+            //等额本金
+            offText: 'Other',
+            size:'normal',
+            onColor:'primary',
+            offColor:'info'
+        });
+        $('#publicAccumulationFundsLoanLimitCalculatedForm')
+                .bootstrapValidator({
+                    message: 'This value is not valid',
+                    feedbackIcons: {
+                        valid: 'glyphicon glyphicon-ok',
+                        invalid: 'glyphicon glyphicon-remove',
+                        validating: 'glyphicon glyphicon-refresh'
+                    },
+                    fields: {
+                        username: {
+                            message: 'The username is not valid',
+                            validators: {
+                                notEmpty: {
+                                    message: 'The username is required and can\'t be empty'
+                                },
+                                stringLength: {
+                                    min: 6,
+                                    max: 30,
+                                    message: 'The username must be more than 6 and less than 30 characters long'
+                                },
+                                /*remote: {
+                                 url: 'remote.php',
+                                 message: 'The username is not available'
+                                 },*/
+                                regexp: {
+                                    regexp: /^[a-zA-Z0-9_\.]+$/,
+                                    message: 'The username can only consist of alphabetical, number, dot and underscore'
+                                }
+                            }
+                        },
+                        email: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'The email address is required and can\'t be empty'
+                                },
+                                emailAddress: {
+                                    message: 'The input is not a valid email address'
+                                }
+                            }
+                        },
+                        password: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'The password is required and can\'t be empty'
+                                }
+                            }
+                        }
+                    }
+                })
+                .on('success.form.bv', function(e) {
+                    // Prevent form submission
+                    e.preventDefault();
+                    $("body").mLoading({
+                        text:"Calculating ...",//加载文字，默认值：加载中...
+                        //icon:"",//加载图标，默认值：一个小型的base64的gif图片
+                        html:false,//设置加载内容是否是html格式，默认值是false
+                        content:"",//忽略icon和text的值，直接在加载框中显示此值
+                        mask:true//是否显示遮罩效果，默认显示
+                    });
+                    // Get the form instance
+                    var $form = $(e.target);
+
+                    // Get the BootstrapValidator instance
+                    var bv = $form.data('bootstrapValidator');
+
+                    // Use Ajax to submit form data
+                    $.post($form.attr('action'), $form.serialize(), function(result) {
+                        console.log('the result is: ');
+                        console.log(result);
+                        $("body").mLoading("hide");
+                        $("#ShowPublicAccumulationFundsLoanLimitCalculateResult").modal('show');
+                    }, 'json');
+                });
+    });
+
+</script>
+<form id="publicAccumulationFundsLoanLimitCalculatedForm" class="form-horizontal" action="{{ url_for('main.calculate_public_accumulation_funds_loan') }}" method="post">
+    <div class="panel panel-default">
+        <div class="panel-heading text-center"><h3>Public Accumulation Funds Loan Limit Calculation</h3></div>
+
+        <div class="form-group" data-toggle="tooltip" title="Marital Status" style="margin-top: 20px;">
+            <label for="inputMaritalStatus" class="col-sm-2 control-label">Marital Status</label>
+            <div class="col-sm-9">
+                <input id="inputMaritalStatus" name="marital-status" checked type="checkbox" />
+            </div>
+        </div>
+        <div class="form-group" id="single-for-monthly-deposit">
+            <div class="col-sm-offset-2 col-sm-9">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <!--个人每月的存款-->
+                        <div class="form-group" data-toggle="tooltip" title="Personal Monthly Deposit">
+                            <label for="inputPersonalMonthlyDeposit" class="col-sm-2 control-label">Personal Monthly Deposit</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="inputPersonalMonthlyDeposit" name="personal-monthly-deposit">
+                            </div>
+                        </div>
+                        <div class="form-group" data-toggle="tooltip" title="Deposit Ratio">
+                            <!--缴纳百分比-->
+                            <label for="inputPersonalDepositRatio" class="col-sm-2 control-label">Deposit Ratio</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="inputPersonalDepositRatio" name="personal-deposit-ratio">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group hide in" id="spouse-for-monthly-deposit">
+            <div class="col-sm-offset-2 col-sm-9">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-group" data-toggle="tooltip" title="Spouse Monthly Deposit">
+                            <label for="inputSpouseMonthlyDeposit" class="col-sm-2 control-label">Spouse Monthly Deposit</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="inputSpouseMonthlyDeposit" name="spouse-monthly-deposit">
+                            </div>
+                        </div>
+                        <div class="form-group" data-toggle="tooltip" title="Deposit Ratio">
+                            <!--缴纳百分比-->
+                            <label for="inputSpouseDepositRatio" class="col-sm-2 control-label">Deposit Ratio</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="inputSpouseDepositRatio" name="spouse-deposit-ratio">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--房屋评估价值或实际购房款-->
+        <div class="form-group" data-toggle="tooltip" title="Total Loan">
+            <label for="inputHomeEstimatedPrice" class="col-sm-2 control-label">Home Estimated Price</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="inputHomeEstimatedPrice" name="home-estimated-price">
+            </div>
+        </div>
+        <!--房屋性质-->
+        <div class="form-group" data-toggle="tooltip" title="Repayment Mode">
+            <label for="inputRoomType" class="col-sm-2 control-label">Room Type</label>
+            <div class="col-sm-9">
+                <input id="inputRoomType" name="room-type" checked type="checkbox" />
+            </div>
+        </div>
+        <!--贷款年限-->
+        <div class="form-group" data-toggle="tooltip" title="Loan Period">
+            <label for="inputPeriodApplyForLoan" class="col-sm-2 control-label">Loan Period</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="inputPeriodApplyForLoan" name="loan-period">
+            </div>
+        </div>
+
+
+        <!--个人信用等级-->
+        <div class="form-group" data-toggle="tooltip" title="Loan Type" style="margin-top: 20px;">
+            <label for="inputPersonCreditRatings" class="col-sm-2 control-label">Credit Ratings</label>
+            <div class="col-sm-9">
+                <ul id="inputPersonCreditRatings" class="list-group" style="list-style: none">
+                    <li>
+                        <input tabindex="1" type="radio" id="credit-rating-aaa" name="credit-ratings">
+                        <label for="business-loan">AAA</label>
+                    </li>
+                    <li>
+                        <input tabindex="2" type="radio" id="credit-rating-aa" name="credit-ratings">
+                        <label for="public-accumulation-funds-loan">AA</label>
+                    </li>
+                    <li>
+                        <input tabindex="3" type="radio" id="credit-rating-other" name="credit-ratings">
+                        <label for="mixture-loan">Other</label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-9">
+                    <div class="btn-toolbar pull-right">
+                        <button type="reset" class="btn btn-primary">Reset</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- 计算结果模块 -->
+<div class="modal fade" id="ShowPublicAccumulationFundsLoanLimitCalculateResult" tabindex="-1" role="dialog" aria-labelledby="Show The Result Of Calculation">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Show The Result Of Calculation</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-group row">
+                            <label for="inputYourTheHighestCreditLine" class="col-sm-3 control-label">Your The Highest Credit Line</label>
+                            <div class="col-sm-8">
+                                <input type="text" readonly class="form-control" id="inputYourTheHighestCreditLine" name="your-the-highest-credit-line">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Print</button>
+                <div class="export btn-group dropup">
+                    <button class="btn btn-default dropdown-toggle" aria-label="export type" title="Export data" data-toggle="dropdown" type="button">
+                        <i class="glyphicon glyphicon-export icon-share"></i>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="menuitem" data-type="pdf"><a href="javascript:void(0)">PDF</a></li>
+                        <li role="menuitem" data-type="word"><a href="javascript:void(0)">Word</a></li>
+                        <li role="menuitem" data-type="txt"><a href="javascript:void(0)">TXT</a></li>
+                        <li role="menuitem" data-type="json"><a href="javascript:void(0)">JSON</a></li>
+                        <li role="menuitem" data-type="excel"><a href="javascript:void(0)">MS-Excel</a></li>
+                        <li role="menuitem" data-type="xml"><a href="javascript:void(0)">XML</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

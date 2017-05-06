@@ -1,7 +1,117 @@
 <!--贷款计算器-->
+<script type="text/javascript">
+    $(document).ready(function() {
+        var area_and_price = $('#compute-mode-for-area-price');
+        var total_loan = $('#compute-mode-for-total-loan');
+        $("input[name='compute-mode']")
+                .bootstrapSwitch({
+                    onText: 'Area & Price',
+                    offText: 'Total Loan',
+                    size:'normal',
+                    onColor:'primary',
+                    offColor:'info',
+                    handleWidth: 100
+                })
+                .on('switchChange.bootstrapSwitch', function(event, state) {
+                    if(state){
+                        total_loan.addClass('hide in');
+                        area_and_price.removeClass('hide in');
+
+                    }else {
+                        area_and_price.addClass('hide in');
+                        total_loan.removeClass('hide in');
+                    }
+                })
+                .end();
+        $("[name='repayment-mode']").bootstrapSwitch({
+            //等额本息
+            onText: 'Fixed-payment Mortgage',
+            //等额本金
+            offText: 'Fixed-basis Mortgage',
+            size:'normal',
+            onColor:'primary',
+            offColor:'info',
+            handleWidth: 200
+        });
+        $('#loanCalculatedForm')
+                .bootstrapValidator({
+                    message: 'This value is not valid',
+                    feedbackIcons: {
+                        valid: 'glyphicon glyphicon-ok',
+                        invalid: 'glyphicon glyphicon-remove',
+                        validating: 'glyphicon glyphicon-refresh'
+                    },
+                    fields: {
+                        username: {
+                            message: 'The username is not valid',
+                            validators: {
+                                notEmpty: {
+                                    message: 'The username is required and can\'t be empty'
+                                },
+                                stringLength: {
+                                    min: 6,
+                                    max: 30,
+                                    message: 'The username must be more than 6 and less than 30 characters long'
+                                },
+                                /*remote: {
+                                 url: 'remote.php',
+                                 message: 'The username is not available'
+                                 },*/
+                                regexp: {
+                                    regexp: /^[a-zA-Z0-9_\.]+$/,
+                                    message: 'The username can only consist of alphabetical, number, dot and underscore'
+                                }
+                            }
+                        },
+                        email: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'The email address is required and can\'t be empty'
+                                },
+                                emailAddress: {
+                                    message: 'The input is not a valid email address'
+                                }
+                            }
+                        },
+                        password: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'The password is required and can\'t be empty'
+                                }
+                            }
+                        }
+                    }
+                })
+                .on('success.form.bv', function(e) {
+                    // Prevent form submission
+                    e.preventDefault();
+                    $("body").mLoading({
+                        text:"Calculating ...",//加载文字，默认值：加载中...
+                        //icon:"",//加载图标，默认值：一个小型的base64的gif图片
+                        html:false,//设置加载内容是否是html格式，默认值是false
+                        content:"",//忽略icon和text的值，直接在加载框中显示此值
+                        mask:true//是否显示遮罩效果，默认显示
+                    });
+                    // Get the form instance
+                    var $form = $(e.target);
+
+                    // Get the BootstrapValidator instance
+                    var bv = $form.data('bootstrapValidator');
+
+                    // Use Ajax to submit form data
+                    $.post($form.attr('action'), $form.serialize(), function(result) {
+                        console.log('the result is: ');
+                        console.log(result);
+                        $("body").mLoading("hide");
+                        $("#ShowCalculateResult").modal('show');
+                    }, 'json');
+                });
+    });
+
+</script>
 <form id="loanCalculatedForm" class="form-horizontal" action="{{ url_for('main.calculate_loan') }}" method="post">
     <div class="panel panel-default">
-        <div class="panel-heading">Please Input</div>
+        <div class="panel-heading text-center"><h3>Loan Calculation</h3></div>
         <div class="form-group" data-toggle="tooltip" title="Loan Type" style="margin-top: 20px;">
             <label for="inputLoanType" class="col-sm-2 control-label">Loan Type</label>
             <div class="col-sm-9">
@@ -27,42 +137,62 @@
                 <input id="inputComputeMode" name="compute-mode" checked type="checkbox" />
             </div>
         </div>
-        <div class="form-group" data-toggle="tooltip" title="">
+        <div class="form-group" id="compute-mode-for-area-price">
             <div class="col-sm-offset-2 col-sm-9">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <div class="form-group" data-toggle="tooltip" title="User's Last Login Time">
-                            <label for="inputLastLoginTime" class="col-sm-2 control-label">Area</label>
+                        <div class="form-group" data-toggle="tooltip" title="Home's Total Area">
+                            <label for="inputHomeTotalArea" class="col-sm-2 control-label">Area</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="inputLastLoginTime">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="inputHomeTotalArea" name="total-area" aria-describedby="inputHomeTotalArea-Addon">
+                                    <span class="input-group-addon" id="inputHomeTotalArea-Addon">Square Meter</span>
+                                </div>
+
                             </div>
                         </div>
-                        <div class="form-group" data-toggle="tooltip" title="User's Last Login Address">
-                            <label for="inputLastLoginAddress" class="col-sm-2 control-label">Unit Price</label>
+                        <div class="form-group" data-toggle="tooltip" title="Home's Unit Price">
+                            <label for="inputHomeUnitPrice" class="col-sm-2 control-label">Unit Price</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="inputLastLoginAddress">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="inputHomeUnitPrice" name="unit-price" aria-describedby="inputHomeUnitPrice-Addon">
+                                    <span class="input-group-addon" id="inputHomeUnitPrice-Addon">Yuan / Square Meterr</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group" data-toggle="tooltip" title="User's Last Login IP">
+                        <div class="form-group" data-toggle="tooltip" title="Home's Mortgage Percentage">
                             <!--按揭百分比-->
-                            <label for="inputLastLoginIP" class="col-sm-2 control-label">Mortgage Percentage</label>
+                            <label for="inputHomeMortgagePercentage" class="col-sm-2 control-label">Mortgage Percentage</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="inputLastLoginIP">
+                                <select class="selectpicker" data-live-search="true" id="inputHomeMortgagePercentage" name="mortgage-percentage">
+                                    <option data-tokens="9">9 Percent</option>
+                                    <option data-tokens="8">8 Percent</option>
+                                    <option data-tokens="7">7 Percent</option>
+                                    <option data-tokens="6">6 Percent</option>
+                                    <option data-tokens="5">5 Percent</option>
+                                    <option data-tokens="4">4 Percent</option>
+                                    <option data-tokens="3">3 Percent</option>
+                                    <option data-tokens="2">2 Percent</option>
+                                    <option data-tokens="1">1 Percent</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="form-group" data-toggle="tooltip" title="">
+        <div class="form-group hide in" id="compute-mode-for-total-loan">
             <div class="col-sm-offset-2 col-sm-9">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="form-group" data-toggle="tooltip" title="Total Loan">
                             <!--贷款总额-->
-                            <label for="inputLastLoginTime" class="col-sm-2 control-label">Total Loan</label>
+                            <label for="inputHomeTotalLoan" class="col-sm-2 control-label">Total Loan</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="inputLastLoginTime">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="inputHomeTotalLoan" name="total-loan" aria-describedby="inputHomeTotalLoan-Addon">
+                                    <span class="input-group-addon" id="inputHomeTotalLoan-Addon">Yuan</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -70,24 +200,39 @@
             </div>
         </div>
         <!--贷款年限-->
-        <div class="form-group" data-toggle="tooltip" title="User's Email">
-            <label for="inputEmail" class="col-sm-2 control-label">Mortgage Year</label>
+        <div class="form-group" data-toggle="tooltip" title="Home's Mortgage Year">
+            <label for="inputHomeMortgageYear" class="col-sm-2 control-label">Mortgage Year</label>
             <div class="col-sm-9">
-                <input type="email" class="form-control" id="inputEmail">
+                <select class="selectpicker" data-live-search="true" id="inputHomeMortgageYear" name="mortgage-year">
+                    <option data-tokens="ketchup mustard">20 Year (240 Periods)</option>
+                    <option data-tokens="mustard">10 Year (120 Periods)</option>
+                    <option data-tokens="frosting">2 Year (60 Periods)</option>
+                </select>
             </div>
         </div>
         <!--贷款利率-->
-        <div class="form-group" data-toggle="tooltip" title="Loan Rate">
-            <label for="inputTelephone" class="col-sm-2 control-label">Loan Rate</label>
+        <div class="form-group" data-toggle="tooltip" title="Home's Loan Rate">
+            <label for="inputHomeLoanRate" class="col-sm-2 control-label">Loan Rate</label>
             <div class="col-sm-9">
-                <input type="text" class="form-control" id="inputTelephone">
+                <select class="selectpicker" data-live-search="true" id="inputHomeLoanRate" name="loan-rate">
+                    <optgroup label="2017 Year">
+                        <option data-tokens="ketchup mustard">5月6日 Base Rate</option>
+                        <option data-tokens="mustard">5月1日 Base Rate</option>
+                        <option data-tokens="frosting">4月30日 Base Rate</option>
+                    </optgroup>
+                    <optgroup label="2016 Year">
+                        <option data-tokens="ketchup mustard">5月6日 Base Rate</option>
+                        <option data-tokens="mustard">5月1日 Base Rate</option>
+                        <option data-tokens="frosting">4月30日 Base Rate</option>
+                    </optgroup>
+                </select>
             </div>
         </div>
         <!--还款方式-->
         <div class="form-group" data-toggle="tooltip" title="Repayment Mode">
-            <label for="inputRepaymentMode" class="col-sm-2 control-label">Repayment Mode</label>
+            <label for="inputHomeRepaymentMode" class="col-sm-2 control-label">Repayment Mode</label>
             <div class="col-sm-9">
-                <input id="inputRepaymentMode" name="repayment-mode" checked type="checkbox" />
+                <input id="inputHomeRepaymentMode" name="repayment-mode" checked type="checkbox" />
             </div>
         </div>
 
@@ -97,7 +242,6 @@
                     <div class="btn-toolbar pull-right">
                         <button type="reset" class="btn btn-primary">Reset</button>
                         <button type="submit" class="btn btn-primary">Calculate</button>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ShowCalculateResult">modal</button>
                     </div>
 
                 </div>
@@ -120,33 +264,50 @@
                         <div class="form-group row">
                             <label for="inputHomeTotalNumbers" class="col-sm-3 control-label">Home Total Nums</label>
                             <div class="col-sm-8">
-                                <input type="text" readonly class="form-control" id="inputHomeTotalNumbers" name="home-total-nums">
+                                <div class="input-group">
+                                    <input type="text" readonly class="form-control" id="inputHomeTotalNumbers" name="home-total-nums" aria-describedby="inputHomeTotalNumbers-Addon">
+                                    <span class="input-group-addon" id="inputHomeTotalNumbers-Addon">Yuan</span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="inputLoanTotalNumbers" class="col-sm-3 control-label">Loan Total Nums</label>
                             <div class="col-sm-8">
-                                <input type="text" readonly class="form-control" id="inputLoanTotalNumbers" name="loan-total-nums">
+                                <div class="input-group">
+                                    <input type="text" readonly class="form-control" id="inputLoanTotalNumbers" name="loan-total-nums" aria-describedby="inputLoanTotalNumbers-Addon">
+                                    <span class="input-group-addon" id="inputLoanTotalNumbers-Addon">Yuan</span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="inputReplaymentTotalNumbers" class="col-sm-3 control-label">Replayment Total Nums</label>
                             <div class="col-sm-8">
-                                <input type="text" readonly class="form-control" id="inputReplaymentTotalNumbers" name="replayment-total-nums">
+                                <div class="input-group">
+                                    <input type="text" readonly class="form-control" id="inputReplaymentTotalNumbers" name="replayment-total-nums" aria-describedby="inputReplaymentTotalNumbers-Addon">
+                                    <span class="input-group-addon" id="inputReplaymentTotalNumbers-Addon">Yuan</span>
+                                </div>
+
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="inputPaymentInterest" class="col-sm-3 control-label">Payment Interest</label>
                             <div class="col-sm-8">
                                 <!--偿还利息-->
-                                <input type="text" readonly class="form-control" id="inputPaymentInterest" name="payment-interest">
+                                <div class="input-group">
+                                    <input type="text" readonly class="form-control" id="inputPaymentInterest" name="payment-interest" aria-describedby="inputPaymentInterest-Addon">
+                                    <span class="input-group-addon" id="inputPaymentInterest-Addon">Yuan</span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="inputInitialPayment" class="col-sm-3 control-label">Initial Payment</label>
                             <div class="col-sm-8">
                                 <!--首期付款-->
-                                <input type="text" readonly class="form-control" id="inputInitialPayment" name="initial-payment">
+                                <div class="input-group">
+                                    <input type="text" readonly class="form-control" id="inputInitialPayment" name="initial-payment" aria-describedby="inputInitialPayment-Addon">
+                                    <span class="input-group-addon" id="inputInitialPayment-Addon">Yuan</span>
+                                </div>
+
                             </div>
                         </div>
                         <div class="form-group row">
@@ -159,7 +320,11 @@
                         <div class="form-group row">
                             <label for="inputAverageMonthlyRepayment" class="col-sm-3 control-label">Average Monthly Repayment</label>
                             <div class="col-sm-8">
-                                <input type="text" readonly class="form-control" id="inputAverageMonthlyRepayment" name="average-monthly-repayment">
+                                <div class="input-group">
+                                    <input type="text" readonly class="form-control" id="inputAverageMonthlyRepayment" name="average-monthly-repayment" aria-describedby="inputAverageMonthlyRepayment-Addon">
+                                    <span class="input-group-addon" id="inputAverageMonthlyRepayment-Addon">Yuan</span>
+                                </div>
+
                             </div>
                         </div>
                     </div>

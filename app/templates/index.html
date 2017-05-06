@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="GB2312">
+    <Meta name="keywords" Content="房贷,购房能力,提前还款,公积金,贷款,计算">
+    <Meta name="keywords" lang="EN" Content="house,prepayment,affordability,fund,loan,calculate">
+    <Meta name="description" Content="房贷计算,购房能力计算,提前还款计算，公积金购房计算">
+    <title>Loan Calculator</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename = 'img/favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename = 'img/favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}">
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/bootstrap-tabs-x.min.css') }}"/>
@@ -17,16 +22,21 @@
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrapValidator.min.css') }}" crossorigin="anonymous">
     <!-- bootstrap validator js -->
     <script type="text/javascript" src="{{ url_for('static', filename = 'js/bootstrapValidator.min.js') }}" crossorigin="anonymous"></script>
+
     <!-- bootstrap-switch css -->
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrap-switch.min.css') }}" crossorigin="anonymous">
     <!-- bootstrap-switch js -->
     <script type="text/javascript" src="{{ url_for('static', filename = 'js/bootstrap-switch.min.js') }}" crossorigin="anonymous"></script>
 
+    <!-- bootstrap-select css -->
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrap-select.min.css') }}" crossorigin="anonymous">
+    <!-- bootstrap-select js -->
     <script type="text/javascript" src="{{ url_for('static', filename = 'js/bootstrap-select.min.js') }}" crossorigin="anonymous"></script>
+
     <!--遮罩使用的 js 和 css -->
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/jquery.mloading.css') }}" crossorigin="anonymous">
     <script type="text/javascript" src="{{ url_for('static', filename = 'js/jquery.mloading.js') }}" crossorigin="anonymous"></script>
+
     <!-- bootstrap validator css -->
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrapValidator.min.css') }}" crossorigin="anonymous">
     <!-- bootstrap validator js -->
@@ -57,103 +67,14 @@
             });
             $('div.tabs-x .nav-tabs [data-toggle="tab"]').on('tabsX.click', function (event, jqXHR, status) {
                 console.log('tabsX.click event');
+                console.log(event);
+                console.log(this);
             });
             $('input:radio').iCheck({
                 radioClass: 'iradio_square-green',
                 increaseArea: '20%' // optional
             });
-            $("[name='compute-mode']").bootstrapSwitch({
-                onText: 'Area & Price',
-                offText: 'Total Loan',
-                size:'normal',
-                onColor:'primary',
-                offColor:'info',
-                handleWidth: 100
-            });
-            $("[name='repayment-mode']").bootstrapSwitch({
-                //等额本息
-                onText: 'Fixed-payment Mortgage',
-                //等额本金
-                offText: 'Fixed-basis Mortgage',
-                size:'normal',
-                onColor:'primary',
-                offColor:'info',
-                handleWidth: 100
-            });
 
-            $('#loanCalculatedForm')
-                    .bootstrapValidator({
-                        message: 'This value is not valid',
-                        feedbackIcons: {
-                            valid: 'glyphicon glyphicon-ok',
-                            invalid: 'glyphicon glyphicon-remove',
-                            validating: 'glyphicon glyphicon-refresh'
-                        },
-                        fields: {
-                            username: {
-                                message: 'The username is not valid',
-                                validators: {
-                                    notEmpty: {
-                                        message: 'The username is required and can\'t be empty'
-                                    },
-                                    stringLength: {
-                                        min: 6,
-                                        max: 30,
-                                        message: 'The username must be more than 6 and less than 30 characters long'
-                                    },
-                                    /*remote: {
-                                     url: 'remote.php',
-                                     message: 'The username is not available'
-                                     },*/
-                                    regexp: {
-                                        regexp: /^[a-zA-Z0-9_\.]+$/,
-                                        message: 'The username can only consist of alphabetical, number, dot and underscore'
-                                    }
-                                }
-                            },
-                            email: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'The email address is required and can\'t be empty'
-                                    },
-                                    emailAddress: {
-                                        message: 'The input is not a valid email address'
-                                    }
-                                }
-                            },
-                            password: {
-                                validators: {
-                                    notEmpty: {
-                                        message: 'The password is required and can\'t be empty'
-                                    }
-                                }
-                            }
-                        }
-                    })
-                    .on('success.form.bv', function(e) {
-                        // Prevent form submission
-                        e.preventDefault();
-                        $("body").mLoading({
-                text:"Calculating ...",//加载文字，默认值：加载中...
-                //icon:"",//加载图标，默认值：一个小型的base64的gif图片
-                html:false,//设置加载内容是否是html格式，默认值是false
-                content:"",//忽略icon和text的值，直接在加载框中显示此值
-                mask:true//是否显示遮罩效果，默认显示
-            });
-                        // Get the form instance
-                        var $form = $(e.target);
-
-                        // Get the BootstrapValidator instance
-                        var bv = $form.data('bootstrapValidator');
-
-                        // Use Ajax to submit form data
-                        $.post($form.attr('action'), $form.serialize(), function(result) {
-                            console.log('the result is: ');
-                            console.log(result);
-                            $("body").mLoading("hide");
-                            $("#ShowCalculateResult").modal('show');
-                        }, 'json');
-                    });
         });
     </script>
 </head>
@@ -164,21 +85,27 @@
         <div id="tabs-container" class='tabs-x tabs-above tab-bordered tabs-krajee'>
             <ul id="tabForCalculator" class="nav nav-tabs" role="tablist">
                 <li class="active">
-                    <a href="#home-loan-calculator" role="tab" data-toggle="tab" data-url="/site/fetch-tab?tab=1">
-                        <i class="glyphicon glyphicon-home"></i>Loan
+                    <a href="#home-loan-calculator" role="tab" data-toggle="tab">
+                        <i class="glyphicon glyphicon-home"></i>&nbsp;HomeLoan
                     </a>
                 </li>
-                <li><a href="#public-accumulation-funds-calculator" role="tab-kv" data-toggle="tab" data-url="/site/fetch-tab?tab=2"><i class="glyphicon glyphicon-user"></i>Profile</a></li>
-                <li><a href="#prepayment-calculator" role="tab-kv" data-toggle="tab" data-url="/site/fetch-tab?tab=2"><i class="glyphicon glyphicon-user"></i>Profile</a></li>
-                <li><a href="#home-affordability-calculator" role="tab-kv" data-toggle="tab" data-url="/site/fetch-tab?tab=2"><i class="glyphicon glyphicon-user"></i>Profile</a></li>
+                <li><a href="#public-accumulation-funds-calculator" role="tab-kv" data-toggle="tab">
+                    <i class="glyphicon glyphicon-flag"></i>&nbsp;PublicAccumulationFunds</a>
+                </li>
+                <li><a href="#prepayment-calculator" role="tab-kv" data-toggle="tab">
+                    <i class="glyphicon glyphicon-credit-card"></i>&nbsp;Prepayment</a>
+                </li>
+                <li><a href="#home-affordability-calculator" role="tab-kv" data-toggle="tab">
+                    <i class="glyphicon glyphicon-briefcase"></i>&nbsp;HomeAffordability</a>
+                </li>
 
-                <li class="dropdown">
+                <!--<li class="dropdown">
                     <a href="#" id="myTabDrop-7" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-list-alt"></i>Dropdown <span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop-1">
                         <li><a href="#dropdown-7-1" tabindex="-1" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-chevron-right"></i>Option 1</a></li>
                         <li><a href="#dropdown-7-2" tabindex="-1" role="tab" data-toggle="tab"><i class="glyphicon glyphicon-chevron-right"></i>Option 2</a></li>
                     </ul>
-                </li>
+                </li>-->
             </ul>
             <div id="tabForCalculatorContent" class="tab-content">
                 <div class="tab-pane fade in active" id="home-loan-calculator" >
@@ -201,62 +128,7 @@
 </div>
 
 <footer>
-    <p> Copyright © 2011 All Rights Reserved. &nbsp;|&nbsp; Developed by <a href="http://www.code-pal.com/">Code-pal</a> &nbsp;|&nbsp; Designed by <a href="http://www.bevelandemboss.net/website-template-iphone-app">BevelAndEmboss.net</a> &nbsp;|&nbsp; <strong>HTML5 &amp; CSS 3.0 </strong> </p>
+    <p> Copyright © 2017 All Rights Reserved. &nbsp;|&nbsp; Designed by <a href="#">WFJ</a> &nbsp;|&nbsp; <strong>Calculator &amp; Loan</strong> </p>
 </footer>
-<!-- 添加用户的具体实现模块 -->
-<div class="modal fade" id="add_user" tabindex="-1" role="dialog" aria-labelledby="AddUser">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="addUserForm" class="form-horizontal" action="" method="post">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add User</h4>
-                </div>
-                <div class="modal-body">
-
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="input-group" data-toggle="tooltip" title="Username">
-                                <span class="input-group-addon"><span class="fa fa-user">&nbsp;Name</span></span>
-                                <input type="text" class="form-control" placeholder="Username" name="name">
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="input-group" data-toggle="tooltip" title="Email">
-                                <span class="input-group-addon"><span class="fa fa-envelope-o">&nbsp;Email</span></span>
-                                <input type="email" class="form-control" name="email" placeholder="Email">
-                            </div><!-- /input-group -->
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="input-group" data-toggle="tooltip" title="Password">
-                                <span class="input-group-addon"><span class="fa fa-key"></span>&nbsp;Password</span>
-                                <input class="form-control" placeholder="******" name="password" type="password">
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="input-group" data-toggle="tooltip" title="Repeat-Password">
-                                <span class="input-group-addon"><span class="fa fa-key">&nbsp;Repeat-Password</span></span>
-                                <input class="form-control" placeholder="******" name="repeat_password" type="password">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Add</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 </body>
 </html>

@@ -1,2 +1,308 @@
 <!--提前还款计算器-->
-<p>待添加</p>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("input[name='prepayment-loan-mode']")
+                .bootstrapSwitch({
+                    onText: 'Commercial',
+                    offText: 'Fund',
+                    size:'normal',
+                    onColor:'primary',
+                    offColor:'info'
+                });
+        $("input[name='prepayment-mode']")
+                .bootstrapSwitch({
+                    onText: 'All',
+                    offText: 'Part',
+                    size:'normal',
+                    onColor:'primary',
+                    offColor:'info'
+                })
+                .on('switchChange.bootstrapSwitch', function(event, state) {
+                    var prepayment_part_loan_money = $('#prepayment-part-loan');
+                    if(state){
+                        prepayment_part_loan_money.addClass('hide in');
+
+                    }else {
+                        prepayment_part_loan_money.removeClass('hide in');
+                    }
+                })
+                .end();
+        $("[name='handle-mode']").bootstrapSwitch({
+            //缩短还款期限,月还款额基本不变
+            onText: 'Short Repayment Period',
+            //减少月还款额,还款期限不变
+            offText: 'Reduce Monthly Payment',
+            size:'normal',
+            onColor:'primary',
+            offColor:'info',
+            handleWidth:200
+        });
+        $('#prepaymentCalculatedForm')
+                .bootstrapValidator({
+                    message: 'This value is not valid',
+                    feedbackIcons: {
+                        valid: 'glyphicon glyphicon-ok',
+                        invalid: 'glyphicon glyphicon-remove',
+                        validating: 'glyphicon glyphicon-refresh'
+                    },
+                    fields: {
+                        username: {
+                            message: 'The username is not valid',
+                            validators: {
+                                notEmpty: {
+                                    message: 'The username is required and can\'t be empty'
+                                },
+                                stringLength: {
+                                    min: 6,
+                                    max: 30,
+                                    message: 'The username must be more than 6 and less than 30 characters long'
+                                },
+                                /*remote: {
+                                 url: 'remote.php',
+                                 message: 'The username is not available'
+                                 },*/
+                                regexp: {
+                                    regexp: /^[a-zA-Z0-9_\.]+$/,
+                                    message: 'The username can only consist of alphabetical, number, dot and underscore'
+                                }
+                            }
+                        },
+                        email: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'The email address is required and can\'t be empty'
+                                },
+                                emailAddress: {
+                                    message: 'The input is not a valid email address'
+                                }
+                            }
+                        },
+                        password: {
+                            validators: {
+                                notEmpty: {
+                                    message: 'The password is required and can\'t be empty'
+                                }
+                            }
+                        }
+                    }
+                })
+                .on('success.form.bv', function(e) {
+                    // Prevent form submission
+                    e.preventDefault();
+                    $("body").mLoading({
+                        text:"Calculating ...",//加载文字，默认值：加载中...
+                        //icon:"",//加载图标，默认值：一个小型的base64的gif图片
+                        html:false,//设置加载内容是否是html格式，默认值是false
+                        content:"",//忽略icon和text的值，直接在加载框中显示此值
+                        mask:true//是否显示遮罩效果，默认显示
+                    });
+                    // Get the form instance
+                    var $form = $(e.target);
+
+                    // Get the BootstrapValidator instance
+                    var bv = $form.data('bootstrapValidator');
+
+                    // Use Ajax to submit form data
+                    $.post($form.attr('action'), $form.serialize(), function(result) {
+                        console.log('the result is: ');
+                        console.log(result);
+                        $("body").mLoading("hide");
+                        $("#ShowHomeAffordabilityCalculateResult").modal('show');
+                    }, 'json');
+                });
+    });
+
+</script>
+<form id="prepaymentCalculatedForm" class="form-horizontal" action="{{ url_for('main.calculate_prepayment') }}" method="post">
+    <div class="panel panel-default">
+        <div class="panel-heading text-center"><h3>Prepayment Calculation</h3></div>
+        <!--贷款类型-->
+        <div class="form-group" data-toggle="tooltip" title="Loan Mode" style="margin-top: 20px;">
+            <label for="inputPrepaymentLoanMode" class="col-sm-2 control-label">Loan Mode</label>
+            <div class="col-sm-9">
+                <input id="inputPrepaymentLoanMode" name="prepayment-loan-mode" checked type="checkbox" />
+            </div>
+        </div>
+
+        <!--原贷款金额-->
+        <div class="form-group" data-toggle="tooltip" title="Original Loan Principal">
+            <label for="inputPrepaymentOriginalLoanPrincipal" class="col-sm-2 control-label">Original Loan Principal</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="inputPrepaymentOriginalLoanPrincipal" name="original-loan-principal">
+            </div>
+        </div>
+        <!--原贷款年限-->
+        <div class="form-group" data-toggle="tooltip" title="Original Loan Period">
+            <label for="inputPrepaymentOriginalLoanPeriod" class="col-sm-2 control-label">Original Loan Period</label>
+            <div class="col-sm-9">
+                <select class="selectpicker" data-live-search="true" id="inputPrepaymentOriginalLoanPeriod" name="original-loan-period">
+                    <option data-tokens="ketchup mustard">20 Year (240 Periods)</option>
+                    <option data-tokens="mustard">10 Year (120 Periods)</option>
+                    <option data-tokens="frosting">2 Year (60 Periods)</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" data-toggle="tooltip" title="Original Loan Period">
+            <label for="inputPrepaymentOriginalLoanPeriod" class="col-sm-2 control-label">Loan Period</label>
+            <div class="col-sm-9">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <!--第一次还款时间-->
+                        <div class="form-group" data-toggle="tooltip" title="Original Loan Period">
+                            <label for="inputPrepaymentFirstRepayment" class="col-sm-3 control-label">First Repayment</label>
+                            <div class="col-sm-6">
+                                <div class="input-group" id="inputPrepaymentFirstRepayment">
+                                    <select class="selectpicker" data-live-search="true" name="first-repayment-year">
+                                        <option data-tokens="2017">2017</option>
+                                        <option data-tokens="2016">2016</option>
+                                        <option data-tokens="2015">2015</option>
+                                        <option data-tokens="2014">2014</option>
+                                    </select>
+                                    <span class="input-group-addon">Year</span>
+                                    <select class="selectpicker" data-live-search="true" name="first-repayment-month">
+                                        <option data-tokens="1">1</option>
+                                        <option data-tokens="2">2</option>
+                                        <option data-tokens="3">3</option>
+                                        <option data-tokens="4">4</option>
+                                        <option data-tokens="5">5</option>
+                                        <option data-tokens="6">6</option>
+                                        <option data-tokens="7">7</option>
+                                        <option data-tokens="8">8</option>
+                                        <option data-tokens="9">9</option>
+                                        <option data-tokens="10">10</option>
+                                        <option data-tokens="11">11</option>
+                                        <option data-tokens="12">12</option>
+                                    </select>
+                                    <span class="input-group-addon">Month</span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!--预计提前还款时间-->
+                        <div class="form-group" data-toggle="tooltip" title="Original Loan Period">
+                            <label for="inputPrepaymentExpectedToPrepayment" class="col-sm-3 control-label">Expected Prepayment</label>
+                            <div class="col-sm-6">
+                                <div class="input-group" id="inputPrepaymentExpectedToPrepayment">
+                                    <select class="selectpicker" data-live-search="true" name="expected-to-prepayment-year">
+                                        <option data-tokens="2017">2017</option>
+                                        <option data-tokens="2016">2016</option>
+                                        <option data-tokens="2015">2015</option>
+                                        <option data-tokens="2014">2014</option>
+                                    </select>
+                                    <span class="input-group-addon">Year</span>
+                                    <select class="selectpicker" data-live-search="true" name="expected-to-prepayment-month">
+                                        <option data-tokens="1">1</option>
+                                        <option data-tokens="2">2</option>
+                                        <option data-tokens="3">3</option>
+                                        <option data-tokens="4">4</option>
+                                        <option data-tokens="5">5</option>
+                                        <option data-tokens="6">6</option>
+                                        <option data-tokens="7">7</option>
+                                        <option data-tokens="8">8</option>
+                                        <option data-tokens="9">9</option>
+                                        <option data-tokens="10">10</option>
+                                        <option data-tokens="11">11</option>
+                                        <option data-tokens="12">12</option>
+                                    </select>
+                                    <span class="input-group-addon">Month</span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!--提前还款方式-->
+        <div class="form-group" data-toggle="tooltip" title="Prepayment Mode">
+            <label for="inputPrepaymentMode" class="col-sm-2 control-label">Prepayment Mode</label>
+            <div class="col-sm-9">
+                <input id="inputPrepaymentMode" name="prepayment-mode" checked type="checkbox" />
+            </div>
+        </div>
+        <!--部分提前还款-->
+        <div class="form-group hide" id="prepayment-part-loan">
+            <div class="col-sm-offset-2 col-sm-9">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-group" data-toggle="tooltip" title="Prepayment Money">
+                            <label for="inputPrepaymentMoney" class="col-sm-2 control-label">Prepayment Money</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="inputPrepaymentMoney" name="prepayment-money">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--处理方式-->
+        <div class="form-group" data-toggle="tooltip" title="Handle Mode">
+            <label for="inputPrepaymentHandleMode" class="col-sm-2 control-label">Handle Mode</label>
+            <div class="col-sm-9">
+                <input id="inputPrepaymentHandleMode" name="handle-mode" checked type="checkbox" />
+            </div>
+        </div>
+
+        <div class="panel-footer">
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-9">
+                    <div class="btn-toolbar pull-right">
+                        <button type="reset" class="btn btn-primary">Reset</button>
+                        <button type="submit" class="btn btn-primary">Calculate</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- 计算结果模块 -->
+<div class="modal fade" id="ShowHomeAffordabilityCalculateResult" tabindex="-1" role="dialog" aria-labelledby="Show The Result Of Calculation">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Show The Result Of Calculation</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="form-group row">
+                            <label for="inputTheMaxPurchaseArea" class="col-sm-3 control-label">The Max Purchase Area</label>
+                            <div class="col-sm-8">
+                                <input type="text" readonly class="form-control" id="inputTheMaxPurchaseArea" name="the-max-purchase-area">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputTheHouseUnitPrice" class="col-sm-3 control-label">The House Unit Price</label>
+                            <div class="col-sm-8">
+                                <input type="text" readonly class="form-control" id="inputTheHouseUnitPrice" name="the-house-unit-price">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Print</button>
+                <div class="export btn-group dropup">
+                    <button class="btn btn-default dropdown-toggle" aria-label="export type" title="Export data" data-toggle="dropdown" type="button">
+                        <i class="glyphicon glyphicon-export icon-share"></i>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li role="menuitem" data-type="pdf"><a href="javascript:void(0)">PDF</a></li>
+                        <li role="menuitem" data-type="word"><a href="javascript:void(0)">Word</a></li>
+                        <li role="menuitem" data-type="txt"><a href="javascript:void(0)">TXT</a></li>
+                        <li role="menuitem" data-type="json"><a href="javascript:void(0)">JSON</a></li>
+                        <li role="menuitem" data-type="excel"><a href="javascript:void(0)">MS-Excel</a></li>
+                        <li role="menuitem" data-type="xml"><a href="javascript:void(0)">XML</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
