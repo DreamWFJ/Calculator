@@ -3,85 +3,150 @@
     $(document).ready(function() {
         var area_and_price = $('#compute-mode-for-area-price');
         var total_loan = $('#compute-mode-for-total-loan');
-        $("input[name='compute-mode']")
-                .bootstrapSwitch({
-                    onText: 'Area & Price',
-                    offText: 'Total Loan',
-                    size:'normal',
-                    onColor:'primary',
-                    offColor:'info',
-                    handleWidth: 100
-                })
-                .on('switchChange.bootstrapSwitch', function(event, state) {
-                    if(state){
-                        total_loan.addClass('hide in');
-                        area_and_price.removeClass('hide in');
-
-                    }else {
-                        area_and_price.addClass('hide in');
-                        total_loan.removeClass('hide in');
-                    }
-                })
-                .end();
+        var form = $('#loanCalculatedForm');
         $("[name='repayment-mode']").bootstrapSwitch({
-            //等额本息
-            onText: 'Fixed-payment Mortgage',
-            //等额本金
-            offText: 'Fixed-basis Mortgage',
             size:'normal',
             onColor:'primary',
             offColor:'info',
             handleWidth: 200
         });
-        $('#loanCalculatedForm')
+        // 初始化switch中 计算模式 的验证
+        $("[name='compute-mode']").on('init.bootstrapSwitch', function(event, state){
+            form.bootstrapValidator('addField', 'total-area', {
+                validators: {
+                    notEmpty: {
+                        message: 'The loan type position is required'
+                    }
+                }
+            });
+            form.bootstrapValidator('addField', 'unit-price', {
+                validators: {
+                    notEmpty: {
+                        message: 'The unit price position is required'
+                    }
+                }
+            });
+            form.bootstrapValidator('addField', 'mortgage-percentage', {
+                validators: {
+                    notEmpty: {
+                        message: 'Please choose 1 mortgage percentage'
+                    }
+                }
+            });
+        });
+        form
                 .bootstrapValidator({
-                    message: 'This value is not valid',
+                    framework: 'bootstrap',
                     feedbackIcons: {
                         valid: 'glyphicon glyphicon-ok',
                         invalid: 'glyphicon glyphicon-remove',
                         validating: 'glyphicon glyphicon-refresh'
                     },
                     fields: {
-                        username: {
-                            message: 'The username is not valid',
+                        'loan-type': {
                             validators: {
                                 notEmpty: {
-                                    message: 'The username is required and can\'t be empty'
-                                },
-                                stringLength: {
-                                    min: 6,
-                                    max: 30,
-                                    message: 'The username must be more than 6 and less than 30 characters long'
-                                },
-                                /*remote: {
-                                 url: 'remote.php',
-                                 message: 'The username is not available'
-                                 },*/
-                                regexp: {
-                                    regexp: /^[a-zA-Z0-9_\.]+$/,
-                                    message: 'The username can only consist of alphabetical, number, dot and underscore'
+                                    message: 'The loan type position is required'
+                                }
+                            }
+
+                        },
+
+                        'mortgage-year': {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Please select your mortgage year'
                                 }
                             }
                         },
-                        email: {
+                        'loan-rate': {
                             validators: {
                                 notEmpty: {
-                                    message: 'The email address is required and can\'t be empty'
-                                },
-                                emailAddress: {
-                                    message: 'The input is not a valid email address'
-                                }
-                            }
-                        },
-                        password: {
-                            validators: {
-                                notEmpty: {
-                                    message: 'The password is required and can\'t be empty'
+                                    message: 'Please select your loan rate'
                                 }
                             }
                         }
                     }
                 })
+                .find('[name="mortgage-year"]')
+                .selectpicker()
+                .change(function(e) {
+                    /* Revalidate the language when it is changed */
+                    form.bootstrapValidator('revalidateField', 'mortgage-year');
+                })
+                .end()
+
+                .find('[name="loan-rate"]')
+                .selectpicker()
+                .change(function(e) {
+                    /* Revalidate the language when it is changed */
+                    form.bootstrapValidator('revalidateField', 'loan-rate');
+                })
+                .end()
+
+                .find('input[name="loan-type"]')
+                // Called when the radios/checkboxes are changed
+                .on('ifChanged', function(e) {
+                    // Get the field name
+                    var field = $(this).attr('name');
+                    form.bootstrapValidator('revalidateField', field);
+                })
+                .end()
+
+                .find('input[name="compute-mode"]')
+                .bootstrapSwitch({
+                    size:'normal',
+                    onColor:'primary',
+                    offColor:'info',
+                    handleWidth: 100
+                })
+                // switch改变时，动态切换校验
+                .on('switchChange.bootstrapSwitch', function(event, state) {
+
+                    if(state){
+                        total_loan.addClass('hide in');
+                        area_and_price.removeClass('hide in');
+
+                        form.bootstrapValidator('addField', 'total-area', {
+                            validators: {
+                                notEmpty: {
+                                    message: 'The loan type position is required'
+                                }
+                            }
+                        });
+                        form.bootstrapValidator('addField', 'unit-price', {
+                            validators: {
+                                notEmpty: {
+                                    message: 'The unit price position is required'
+                                }
+                            }
+                        });
+                        form.bootstrapValidator('addField', 'mortgage-percentage', {
+                            validators: {
+                                notEmpty: {
+                                    message: 'Please choose 1 mortgage percentage'
+                                }
+                            }
+                        });
+                        form.bootstrapValidator('removeField', 'total-loan');
+
+                    }else {
+                        area_and_price.addClass('hide in');
+                        total_loan.removeClass('hide in');
+                        form.bootstrapValidator('addField', 'total-loan', {
+                            validators: {
+                                notEmpty: {
+                                    message: 'The loan loan position is required'
+                                }
+                            }
+                        });
+                        form.bootstrapValidator('removeField', 'total-area');
+                        form.bootstrapValidator('removeField', 'unit-price');
+                        form.bootstrapValidator('removeField', 'mortgage-percentage');
+                    }
+                })
+                .end()
+                // 表格校验成功时，提交数据
                 .on('success.form.bv', function(e) {
                     // Prevent form submission
                     e.preventDefault();
@@ -100,9 +165,15 @@
 
                     // Use Ajax to submit form data
                     $.post($form.attr('action'), $form.serialize(), function(result) {
-                        console.log('the result is: ');
-                        console.log(result);
                         $("body").mLoading("hide");
+                        console.log(result);
+                        $("inputHomeTotalNumbers").val(result.home_total_price);
+                        $("inputLoanTotalNumbers").val(result.home_total_loan);
+                        $("inputReplaymentTotalNumbers").val(result.repayment_total_price);
+                        $("inputPaymentInterest").val(result.payment_interest);
+                        $("inputInitialPayment").val(result.first_payment);
+                        $("inputTermsDurationOfLoan").val(result.loan_terms);
+                        $("inputAverageMonthlyRepayment").val(result.average_monthly_repayment);
                         $("#ShowCalculateResult").modal('show');
                     }, 'json');
                 });
@@ -111,30 +182,30 @@
 </script>
 <form id="loanCalculatedForm" class="form-horizontal" action="{{ url_for('main.calculate_loan') }}" method="post">
     <div class="panel panel-default">
-        <div class="panel-heading text-center"><h3>Loan Calculation</h3></div>
+        <div class="panel-heading text-center"><h3>{{ _('Loan Calculation') }}</h3></div>
         <div class="form-group" data-toggle="tooltip" title="Loan Type" style="margin-top: 20px;">
-            <label for="inputLoanType" class="col-sm-2 control-label">Loan Type</label>
+            <label for="inputLoanType" class="col-sm-2 control-label">{{ _('Loan Type') }}</label>
             <div class="col-sm-9">
                 <ul class="list-group" style="list-style: none">
                     <li>
-                        <input tabindex="1" type="radio" id="business-loan" name="loan-type">
-                        <label for="business-loan">Business</label>
+                        <input tabindex="1" type="radio" id="business-loan" name="loan-type" value="business">&nbsp;
+                        <label for="business-loan">{{ _('Business') }}</label>
                     </li>
                     <li>
-                        <input tabindex="2" type="radio" id="public-accumulation-funds-loan" name="loan-type">
-                        <label for="public-accumulation-funds-loan">Public Accumulation Funds</label>
+                        <input tabindex="2" type="radio" id="public-accumulation-funds-loan" name="loan-type" value="funds">&nbsp;
+                        <label for="public-accumulation-funds-loan">{{ _('Public Accumulation Funds') }}</label>
                     </li>
-                    <li>
-                        <input tabindex="3" type="radio" id="mixture-loan" name="loan-type">
-                        <label for="mixture-loan">Mixture</label>
-                    </li>
+                    <!--<li>
+                        <input tabindex="3" type="radio" id="mixture-loan" name="loan-type" value="mixture">&nbsp;
+                        <label for="mixture-loan">{{ _('Mixture') }}</label>
+                    </li>-->
                 </ul>
             </div>
         </div>
         <div class="form-group" data-toggle="tooltip" title="Compute Mode">
-            <label for="inputComputeMode" class="col-sm-2 control-label">Compute Mode</label>
+            <label for="inputComputeMode" class="col-sm-2 control-label">{{ _('Compute Mode') }}</label>
             <div class="col-sm-9">
-                <input id="inputComputeMode" name="compute-mode" checked type="checkbox" />
+                <input id="inputComputeMode" name="compute-mode" data-on-text="{{ _('Area & Price') }}" data-off-text="{{ _('Total Loan') }}" checked type="checkbox" />
             </div>
         </div>
         <div class="form-group" id="compute-mode-for-area-price">
@@ -142,38 +213,38 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="form-group" data-toggle="tooltip" title="Home's Total Area">
-                            <label for="inputHomeTotalArea" class="col-sm-2 control-label">Area</label>
+                            <label for="inputHomeTotalArea" class="col-sm-2 control-label">{{ _('Area') }}</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="inputHomeTotalArea" name="total-area" aria-describedby="inputHomeTotalArea-Addon">
-                                    <span class="input-group-addon" id="inputHomeTotalArea-Addon">Square Meter</span>
+                                    <span class="input-group-addon" id="inputHomeTotalArea-Addon">{{ _('Square Meter') }}</span>
                                 </div>
 
                             </div>
                         </div>
                         <div class="form-group" data-toggle="tooltip" title="Home's Unit Price">
-                            <label for="inputHomeUnitPrice" class="col-sm-2 control-label">Unit Price</label>
+                            <label for="inputHomeUnitPrice" class="col-sm-2 control-label">{{ _('Unit Price') }}</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="inputHomeUnitPrice" name="unit-price" aria-describedby="inputHomeUnitPrice-Addon">
-                                    <span class="input-group-addon" id="inputHomeUnitPrice-Addon">Yuan / Square Meterr</span>
+                                    <span class="input-group-addon" id="inputHomeUnitPrice-Addon">{{ _('Yuan') }} / {{ _('Square Meter') }}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group" data-toggle="tooltip" title="Home's Mortgage Percentage">
                             <!--按揭百分比-->
-                            <label for="inputHomeMortgagePercentage" class="col-sm-2 control-label">Mortgage Percentage</label>
+                            <label for="inputHomeMortgagePercentage" class="col-sm-2 control-label">{{ _('Mortgage Percentage') }}</label>
                             <div class="col-sm-9">
-                                <select class="selectpicker" data-live-search="true" id="inputHomeMortgagePercentage" name="mortgage-percentage">
-                                    <option data-tokens="9">9 Percent</option>
-                                    <option data-tokens="8">8 Percent</option>
-                                    <option data-tokens="7">7 Percent</option>
-                                    <option data-tokens="6">6 Percent</option>
-                                    <option data-tokens="5">5 Percent</option>
-                                    <option data-tokens="4">4 Percent</option>
-                                    <option data-tokens="3">3 Percent</option>
-                                    <option data-tokens="2">2 Percent</option>
-                                    <option data-tokens="1">1 Percent</option>
+                                <select class="selectpicker" data-live-search="true" id="inputHomeMortgagePercentage" name="mortgage-percentage" title="{{ _('Select a option') }}">
+                                    <option data-tokens="9" value="0.9">9 {{ _('Percent') }}</option>
+                                    <option data-tokens="8" value="0.8">8 {{ _('Percent') }}</option>
+                                    <option data-tokens="7" value="0.7">7 {{ _('Percent') }}</option>
+                                    <option data-tokens="6" value="0.6">6 {{ _('Percent') }}</option>
+                                    <option data-tokens="5" value="0.5">5 {{ _('Percent') }}</option>
+                                    <option data-tokens="4" value="0.4">4 {{ _('Percent') }}</option>
+                                    <option data-tokens="3" value="0.3">3 {{ _('Percent') }}</option>
+                                    <option data-tokens="2" value="0.2">2 {{ _('Percent') }}</option>
+                                    <option data-tokens="1" value="0.1">1 {{ _('Percent') }}</option>
                                 </select>
                             </div>
                         </div>
@@ -187,11 +258,11 @@
                     <div class="panel-body">
                         <div class="form-group" data-toggle="tooltip" title="Total Loan">
                             <!--贷款总额-->
-                            <label for="inputHomeTotalLoan" class="col-sm-2 control-label">Total Loan</label>
+                            <label for="inputHomeTotalLoan" class="col-sm-2 control-label">{{ _('Total Loan') }}</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <input type="text" class="form-control" id="inputHomeTotalLoan" name="total-loan" aria-describedby="inputHomeTotalLoan-Addon">
-                                    <span class="input-group-addon" id="inputHomeTotalLoan-Addon">Yuan</span>
+                                    <span class="input-group-addon" id="inputHomeTotalLoan-Addon">{{ _('Yuan') }}</span>
                                 </div>
                             </div>
                         </div>
@@ -201,38 +272,38 @@
         </div>
         <!--贷款年限-->
         <div class="form-group" data-toggle="tooltip" title="Home's Mortgage Year">
-            <label for="inputHomeMortgageYear" class="col-sm-2 control-label">Mortgage Year</label>
+            <label for="inputHomeMortgageYear" class="col-sm-2 control-label">{{ _('Mortgage Year') }}</label>
             <div class="col-sm-9">
-                <select class="selectpicker" data-live-search="true" id="inputHomeMortgageYear" name="mortgage-year">
-                    <option data-tokens="ketchup mustard">20 Year (240 Periods)</option>
-                    <option data-tokens="mustard">10 Year (120 Periods)</option>
-                    <option data-tokens="frosting">2 Year (60 Periods)</option>
+                <select class="selectpicker" data-live-search="true" id="inputHomeMortgageYear" name="mortgage-year" title="{{ _('Select a option') }}">
+                    <option data-tokens="20" value="20">20 {{ _('Year') }} (240 {{ _('Periods') }})</option>
+                    <option data-tokens="10" value="10">10 {{ _('Year') }} (120 {{ _('Periods') }})</option>
+                    <option data-tokens="5" value="5">5 {{ _('Year') }} (60 {{ _('Periods') }})</option>
                 </select>
             </div>
         </div>
         <!--贷款利率-->
         <div class="form-group" data-toggle="tooltip" title="Home's Loan Rate">
-            <label for="inputHomeLoanRate" class="col-sm-2 control-label">Loan Rate</label>
+            <label for="inputHomeLoanRate" class="col-sm-2 control-label">{{ _('Loan Type') }}</label>
             <div class="col-sm-9">
-                <select class="selectpicker" data-live-search="true" id="inputHomeLoanRate" name="loan-rate">
-                    <optgroup label="2017 Year">
-                        <option data-tokens="ketchup mustard">5月6日 Base Rate</option>
-                        <option data-tokens="mustard">5月1日 Base Rate</option>
-                        <option data-tokens="frosting">4月30日 Base Rate</option>
+                <select class="selectpicker" data-live-search="true" id="inputHomeLoanRate" name="loan-rate" title="{{ _('Select a option') }}">
+                    <optgroup label="2017 {{ _('Year') }}">
+                        <option data-tokens="0.12" value="0.12">5{{ _('Month') }}6{{ _('Day') }} {{ _('Base Rate') }}</option>
+                        <option data-tokens="0.12" value="0.12">5{{ _('Month') }}1{{ _('Day') }} {{ _('Base Rate') }}</option>
+                        <option data-tokens="0.12" value="0.12">4{{ _('Month') }}30{{ _('Day') }} {{ _('Base Rate') }}</option>
                     </optgroup>
-                    <optgroup label="2016 Year">
-                        <option data-tokens="ketchup mustard">5月6日 Base Rate</option>
-                        <option data-tokens="mustard">5月1日 Base Rate</option>
-                        <option data-tokens="frosting">4月30日 Base Rate</option>
+                    <optgroup label="2016 {{ _('Year') }}">
+                        <option data-tokens="0.11" value="0.11">5{{ _('Month') }}6{{ _('Day') }} {{ _('Base Rate') }}</option>
+                        <option data-tokens="0.11" value="0.11">5{{ _('Month') }}1{{ _('Day') }} {{ _('Base Rate') }}</option>
+                        <option data-tokens="0.11" value="0.11">4{{ _('Month') }}30{{ _('Day') }} {{ _('Base Rate') }}</option>
                     </optgroup>
                 </select>
             </div>
         </div>
         <!--还款方式-->
         <div class="form-group" data-toggle="tooltip" title="Repayment Mode">
-            <label for="inputHomeRepaymentMode" class="col-sm-2 control-label">Repayment Mode</label>
+            <label for="inputHomeRepaymentMode" class="col-sm-2 control-label">{{ _('Repayment Mode') }}</label>
             <div class="col-sm-9">
-                <input id="inputHomeRepaymentMode" name="repayment-mode" checked type="checkbox" />
+                <input id="inputHomeRepaymentMode" name="repayment-mode" data-on-text="{{ _('Fixed-payment Mortgage') }}" data-off-text="{{ _('Fixed-basis Mortgage') }}" checked type="checkbox" />
             </div>
         </div>
 
@@ -240,8 +311,8 @@
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-9">
                     <div class="btn-toolbar pull-right">
-                        <button type="reset" class="btn btn-primary">Reset</button>
-                        <button type="submit" class="btn btn-primary">Calculate</button>
+                        <button type="reset" class="btn btn-primary">{{ _('Reset') }}</button>
+                        <button type="submit" class="btn btn-primary">{{ _('Calculate') }}</button>
                     </div>
 
                 </div>
@@ -256,73 +327,73 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Show The Result Of Calculation</h4>
+                <h4 class="modal-title">{{ _('Show The Result Of Calculation') }}</h4>
             </div>
             <div class="modal-body">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="form-group row">
-                            <label for="inputHomeTotalNumbers" class="col-sm-3 control-label">Home Total Nums</label>
+                            <label for="inputHomeTotalNumbers" class="col-sm-3 control-label">{{ _('Home Total Nums') }}</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <input type="text" readonly class="form-control" id="inputHomeTotalNumbers" name="home-total-nums" aria-describedby="inputHomeTotalNumbers-Addon">
-                                    <span class="input-group-addon" id="inputHomeTotalNumbers-Addon">Yuan</span>
+                                    <span class="input-group-addon" id="inputHomeTotalNumbers-Addon">{{ _('Yuan') }}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="inputLoanTotalNumbers" class="col-sm-3 control-label">Loan Total Nums</label>
+                            <label for="inputLoanTotalNumbers" class="col-sm-3 control-label">{{ _('Loan Total Nums') }}</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <input type="text" readonly class="form-control" id="inputLoanTotalNumbers" name="loan-total-nums" aria-describedby="inputLoanTotalNumbers-Addon">
-                                    <span class="input-group-addon" id="inputLoanTotalNumbers-Addon">Yuan</span>
+                                    <span class="input-group-addon" id="inputLoanTotalNumbers-Addon">{{ _('Yuan') }}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="inputReplaymentTotalNumbers" class="col-sm-3 control-label">Replayment Total Nums</label>
+                            <label for="inputReplaymentTotalNumbers" class="col-sm-3 control-label">{{ _('Replayment Total Nums') }}</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <input type="text" readonly class="form-control" id="inputReplaymentTotalNumbers" name="replayment-total-nums" aria-describedby="inputReplaymentTotalNumbers-Addon">
-                                    <span class="input-group-addon" id="inputReplaymentTotalNumbers-Addon">Yuan</span>
+                                    <span class="input-group-addon" id="inputReplaymentTotalNumbers-Addon">{{ _('Yuan') }}</span>
                                 </div>
 
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="inputPaymentInterest" class="col-sm-3 control-label">Payment Interest</label>
+                            <label for="inputPaymentInterest" class="col-sm-3 control-label">{{ _('Payment Interest') }}</label>
                             <div class="col-sm-8">
                                 <!--偿还利息-->
                                 <div class="input-group">
                                     <input type="text" readonly class="form-control" id="inputPaymentInterest" name="payment-interest" aria-describedby="inputPaymentInterest-Addon">
-                                    <span class="input-group-addon" id="inputPaymentInterest-Addon">Yuan</span>
+                                    <span class="input-group-addon" id="inputPaymentInterest-Addon">{{ _('Yuan') }}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="inputInitialPayment" class="col-sm-3 control-label">Initial Payment</label>
+                            <label for="inputInitialPayment" class="col-sm-3 control-label">{{ _('Initial Payment') }}</label>
                             <div class="col-sm-8">
                                 <!--首期付款-->
                                 <div class="input-group">
                                     <input type="text" readonly class="form-control" id="inputInitialPayment" name="initial-payment" aria-describedby="inputInitialPayment-Addon">
-                                    <span class="input-group-addon" id="inputInitialPayment-Addon">Yuan</span>
+                                    <span class="input-group-addon" id="inputInitialPayment-Addon">{{ _('Yuan') }}</span>
                                 </div>
 
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="inputTermsDurationOfLoan" class="col-sm-3 control-label">Terms Duration of Loan</label>
+                            <label for="inputTermsDurationOfLoan" class="col-sm-3 control-label">{{ _('Terms Duration of Loan') }}</label>
                             <div class="col-sm-8">
                                 <!--贷款月数-->
                                 <input type="text" readonly class="form-control" id="inputTermsDurationOfLoan" name="terms-duration-of-loan">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="inputAverageMonthlyRepayment" class="col-sm-3 control-label">Average Monthly Repayment</label>
+                            <label for="inputAverageMonthlyRepayment" class="col-sm-3 control-label">{{ _('Average Monthly Repayment') }}</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <input type="text" readonly class="form-control" id="inputAverageMonthlyRepayment" name="average-monthly-repayment" aria-describedby="inputAverageMonthlyRepayment-Addon">
-                                    <span class="input-group-addon" id="inputAverageMonthlyRepayment-Addon">Yuan</span>
+                                    <span class="input-group-addon" id="inputAverageMonthlyRepayment-Addon">{{ _('Yuan') }}</span>
                                 </div>
 
                             </div>
@@ -331,8 +402,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Print</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Close') }}</button>
                 <div class="export btn-group dropup">
                     <button class="btn btn-default dropdown-toggle" aria-label="export type" title="Export data" data-toggle="dropdown" type="button">
                         <i class="glyphicon glyphicon-export icon-share"></i>

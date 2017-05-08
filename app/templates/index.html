@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="GB2312">
-    <Meta name="keywords" Content="房贷,购房能力,提前还款,公积金,贷款,计算">
-    <Meta name="keywords" lang="EN" Content="house,prepayment,affordability,fund,loan,calculate">
-    <Meta name="description" Content="房贷计算,购房能力计算,提前还款计算，公积金购房计算">
-    <title>Calculator</title>
+    <meta charset="UTF-8">
+    <Meta name="keywords" Content="{{ _('House'),_('Prepayment'),_('Affordability'),_('Funds'),_('Loan'),_('Calculate') }}">
+    <Meta name="description" Content="{{ _('Calculate Loan'),_('Calculate Affordability'),_('Calculate Prepayment'),_('Calculate Funds') }}">
+    <title>{{ _('Calculator') }}</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename = 'img/favicon.ico') }}" type="image/x-icon">
     <link rel="icon" href="{{ url_for('static', filename = 'img/favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'css/bootstrap.min.css') }}">
@@ -86,17 +85,17 @@
             <ul id="tabForCalculator" class="nav nav-tabs" role="tablist">
                 <li class="active">
                     <a href="#home-loan-calculator" role="tab" data-toggle="tab">
-                        <i class="glyphicon glyphicon-home"></i>&nbsp;HomeLoan
+                        <i class="glyphicon glyphicon-home"></i>&nbsp;{{ _('Home Loan') }}
                     </a>
                 </li>
                 <li><a href="#public-accumulation-funds-calculator" role="tab-kv" data-toggle="tab">
-                    <i class="glyphicon glyphicon-flag"></i>&nbsp;PublicAccumulationFunds</a>
+                    <i class="glyphicon glyphicon-flag"></i>&nbsp;{{ _('Public Accumulation Funds') }}</a>
                 </li>
                 <li><a href="#prepayment-calculator" role="tab-kv" data-toggle="tab">
-                    <i class="glyphicon glyphicon-credit-card"></i>&nbsp;Prepayment</a>
+                    <i class="glyphicon glyphicon-credit-card"></i>&nbsp;{{ _('Prepayment') }}</a>
                 </li>
                 <li><a href="#home-affordability-calculator" role="tab-kv" data-toggle="tab">
-                    <i class="glyphicon glyphicon-briefcase"></i>&nbsp;HomeAffordability</a>
+                    <i class="glyphicon glyphicon-briefcase"></i>&nbsp;{{ _('Home Affordability') }}</a>
                 </li>
 
                 <!--<li class="dropdown">
@@ -128,7 +127,7 @@
 </div>
 
 <footer>
-    <p> Copyright © 2017 All Rights Reserved. &nbsp;|&nbsp; Designed by <a href="#">WFJ</a> &nbsp;|&nbsp; <strong>Calculator &amp; Loan</strong> </p>
+    <p> {{ _('Copyright') }} © 2017 {{ _('All Rights Reserved') }}. &nbsp;|&nbsp; {{ _('Designed by') }} <a href="#">WFJ</a> &nbsp;|&nbsp; <strong>{{ _('Calculator') }} &amp; {{ _('Loan') }}</strong> </p>
 </footer>
 </body>
 </html>
