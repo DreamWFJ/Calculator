@@ -106,46 +106,58 @@
 </script>
 <form id="homeAffordabilityCalculatedForm" class="form-horizontal" action="{{ url_for('main.calculate_home_affordability') }}" method="post">
     <div class="panel panel-default">
-        <div class="panel-heading text-center"><h3>Home Affordability Calculation</h3></div>
+        <div class="panel-heading text-center"><h3>{{ _('Home Affordability Calculation') }}</h3></div>
         <!--现持有资金-->
         <div class="form-group" data-toggle="tooltip" title="Your Cash" style="margin-top: 20px;">
-            <label for="inputYourCash" class="col-sm-2 control-label">Your Cash</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="inputYourCash" name="your-cash">
+            <label for="inputYourCash" class="col-sm-2 control-label">{{ _('Your Cash') }}</label>
+            <div class="col-sm-7">
+                <div class="input-group">
+                <input type="text" class="form-control" id="inputYourCash" name="your-cash" aria-describedby="inputYourCash-Addon">
+                    <span class="input-group-addon" id="inputYourCash-Addon">{{ _('Yuan') }}</span>
+            </div>
             </div>
         </div>
 
         <!--现家庭月收入-->
         <div class="form-group" data-toggle="tooltip" title="Family Monthly Income">
-            <label for="inputFamilyMonthlyIncome" class="col-sm-2 control-label">Family Monthly Income</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="inputFamilyMonthlyIncome" name="family-monthly-income">
+            <label for="inputFamilyMonthlyIncome" class="col-sm-2 control-label">{{ _('Family Monthly Income') }}</label>
+            <div class="col-sm-7">
+                <div class="input-group">
+                <input type="text" class="form-control" id="inputFamilyMonthlyIncome" name="family-monthly-income" aria-describedby="inputFamilyMonthlyIncome-Addon">
+                    <span class="input-group-addon" id="inputFamilyMonthlyIncome-Addon">{{ _('Yuan') }}</span>
+            </div>
             </div>
         </div>
         <!--家庭平均每月固定支出-->
         <div class="form-group" data-toggle="tooltip" title="Family Monthly Spending">
-            <label for="inputFamilyMonthlySpending" class="col-sm-2 control-label">Family Monthly Spending</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="inputFamilyMonthlySpending" name="family-monthly-spending">
+            <label for="inputFamilyMonthlySpending" class="col-sm-2 control-label">{{ _('Family Monthly Spending') }}</label>
+            <div class="col-sm-7">
+                <div class="input-group">
+                <input type="text" class="form-control" id="inputFamilyMonthlySpending" name="family-monthly-spending" aria-describedby="inputFamilyMonthlySpending-Addon">
+                    <span class="input-group-addon" id="inputFamilyMonthlySpending-Addon">{{ _('Yuan') }}</span>
+            </div>
             </div>
         </div>
         <!--贷款年限-->
         <div class="form-group" data-toggle="tooltip" title="Repay Loan Period">
-            <label for="inputRepayLoanPeriod" class="col-sm-2 control-label">Repay Loan Period</label>
+            <label for="inputRepayLoanPeriod" class="col-sm-2 control-label">{{ _('Repay Loan Period') }}</label>
             <div class="col-sm-9">
                 <select class="selectpicker" data-live-search="true" id="inputRepayLoanPeriod" name="repay-loan-period">
-                    <option data-tokens="ketchup mustard">20 Year (240 Periods)</option>
-                    <option data-tokens="mustard">10 Year (120 Periods)</option>
-                    <option data-tokens="frosting">2 Year (60 Periods)</option>
+                    <option data-tokens="ketchup mustard">20 {{ _('Year') }} (240 {{ _('Periods') }})</option>
+                    <option data-tokens="mustard">10 {{ _('Year') }} (120 {{ _('Periods') }})</option>
+                    <option data-tokens="frosting">2 {{ _('Year') }} (60 {{ _('Periods') }})</option>
                 </select>
             </div>
         </div>
 
         <!--计划购买房屋的面积-->
         <div class="form-group" data-toggle="tooltip" title="House Purchase Area">
-            <label for="inputHousePurchaseArea" class="col-sm-2 control-label">House Purchase Area</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="inputHousePurchaseArea" name="house-purchase-area">
+            <label for="inputHousePurchaseArea" class="col-sm-2 control-label">{{ _('House Purchase Area') }}</label>
+            <div class="col-sm-7">
+                <div class="input-group">
+                <input type="text" class="form-control" id="inputHousePurchaseArea" name="house-purchase-area" aria-describedby="inputHousePurchaseArea-Addon">
+                    <span class="input-group-addon" id="inputHousePurchaseArea-Addon">{{ _('Square Meter') }}</span>
+            </div>
             </div>
         </div>
 
@@ -153,8 +165,8 @@
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-9">
                     <div class="btn-toolbar pull-right">
-                        <button type="reset" class="btn btn-primary">Reset</button>
-                        <button type="submit" class="btn btn-primary">Calculate</button>
+                        <button type="reset" class="btn btn-primary">{{ _('Reset') }}</button>
+                        <button type="submit" class="btn btn-primary">{{ _('Calculate') }}</button>
                     </div>
 
                 </div>
@@ -169,29 +181,43 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Show The Result Of Calculation</h4>
+                <h4 class="modal-title">{{ _('Show The Result Of Calculation') }}</h4>
             </div>
             <div class="modal-body">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="form-group row">
-                            <label for="inputTheMaxPurchaseArea" class="col-sm-3 control-label">The Max Purchase Area</label>
+                            <label for="inputTheMaxPurchaseArea" class="col-sm-3 control-label">{{ _('The Max Purchase Area') }}</label>
                             <div class="col-sm-8">
-                                <input type="text" readonly class="form-control" id="inputTheMaxPurchaseArea" name="the-max-purchase-area">
+                                <div class="input-group">
+                                <input type="text" readonly class="form-control" id="inputTheMaxPurchaseArea" name="the-max-purchase-area" aria-describedby="inputTheMaxPurchaseArea-Addon">
+                                    <span class="input-group-addon" id="inputTheMaxPurchaseArea-Addon">{{ _('Square Meter') }}</span>
+                            </div>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="inputTheHouseUnitPrice" class="col-sm-3 control-label">The House Unit Price</label>
+                            <label for="inputTheHouseUnitPrice" class="col-sm-3 control-label">{{ _('The House Unit Price') }}</label>
                             <div class="col-sm-8">
-                                <input type="text" readonly class="form-control" id="inputTheHouseUnitPrice" name="the-house-unit-price">
+                                <div class="input-group">
+                                <input type="text" readonly class="form-control" id="inputTheHouseUnitPrice" name="the-house-unit-price" aria-describedby="inputTheHouseUnitPrice-Addon">
+                                    <span class="input-group-addon" id="inputTheHouseUnitPrice-Addon">{{ _('Yuan') }} / {{ _('Square Meter') }}</span>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="inputTheMaxPurchaseArea" class="col-sm-3 control-label">{{ _('The Purchase Home Total Price ') }}</label>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                <input type="text" readonly class="form-control" id="inputThePurchaseHomeTotalPrice" name="the-purchase-home-total-price" aria-describedby="inputThePurchaseHomeTotalPrice-Addon">
+                                    <span class="input-group-addon" id="inputThePurchaseHomeTotalPrice-Addon">{{ _('Yuan') }}</span>
+                            </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Print</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Close') }}</button>
                 <div class="export btn-group dropup">
                     <button class="btn btn-default dropdown-toggle" aria-label="export type" title="Export data" data-toggle="dropdown" type="button">
                         <i class="glyphicon glyphicon-export icon-share"></i>

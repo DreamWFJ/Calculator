@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-05-08 15:34+0800\n"
+"POT-Creation-Date: 2017-05-12 19:51+0800\n"
 "PO-Revision-Date: 2017-05-08 10:55+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -18,166 +18,378 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: app/main/views.py:37 app/main/views.py:45
+#: app/main/views.py:93
 msgid "ok"
 msgstr ""
 
-#: app/templates/_home_loan.html:183
-msgid "Loan Calculation"
-msgstr "贷款计算"
+#: app/templates/_home_affordability.html:109
+msgid "Home Affordability Calculation"
+msgstr "购房能力评估计算器"
 
-#: app/templates/_home_loan.html:185 app/templates/_home_loan.html:284
-msgid "Loan Type"
-msgstr "贷款类型"
+#: app/templates/_home_affordability.html:112
+msgid "Your Cash"
+msgstr "现持有资金"
 
-#: app/templates/_home_loan.html:190
-msgid "Business"
-msgstr "商业贷款"
-
-#: app/templates/_home_loan.html:194 app/templates/index.html:92
-msgid "Public Accumulation Funds"
-msgstr "公积金贷款"
-
-#: app/templates/_home_loan.html:198
-msgid "Mixture"
-msgstr "组合型贷款"
-
-#: app/templates/_home_loan.html:204
-msgid "Compute Mode"
-msgstr "计算模式"
-
-#: app/templates/_home_loan.html:206
-msgid "Area & Price"
-msgstr "面积、单价"
-
-#: app/templates/_home_loan.html:206 app/templates/_home_loan.html:259
-msgid "Total Loan"
-msgstr "贷款总额"
-
-#: app/templates/_home_loan.html:214
-msgid "Area"
-msgstr "面积"
-
-#: app/templates/_home_loan.html:218 app/templates/_home_loan.html:228
-msgid "Square Meter"
-msgstr "平米"
-
-#: app/templates/_home_loan.html:224
-msgid "Unit Price"
-msgstr "单价"
-
-#: app/templates/_home_loan.html:228 app/templates/_home_loan.html:263
-#: app/templates/_home_loan.html:338 app/templates/_home_loan.html:347
-#: app/templates/_home_loan.html:356 app/templates/_home_loan.html:367
-#: app/templates/_home_loan.html:377 app/templates/_home_loan.html:394
+#: app/templates/_home_affordability.html:116
+#: app/templates/_home_affordability.html:127
+#: app/templates/_home_affordability.html:137
+#: app/templates/_home_affordability.html:203
+#: app/templates/_home_affordability.html:212 app/templates/_home_loan.html:230
+#: app/templates/_home_loan.html:265 app/templates/_home_loan.html:340
+#: app/templates/_home_loan.html:349 app/templates/_home_loan.html:358
+#: app/templates/_home_loan.html:369 app/templates/_home_loan.html:379
+#: app/templates/_home_loan.html:396 app/templates/_prepayment.html:125
+#: app/templates/_prepayment.html:230 app/templates/_prepayment.html:274
+#: app/templates/_prepayment.html:283 app/templates/_prepayment.html:292
+#: app/templates/_prepayment.html:303 app/templates/_prepayment.html:313
+#: app/templates/_prepayment.html:330
+#: app/templates/_public_accumulation_funds.html:122
+#: app/templates/_public_accumulation_funds.html:149
+#: app/templates/_public_accumulation_funds.html:173
+#: app/templates/_public_accumulation_funds.html:246
 msgid "Yuan"
 msgstr "元"
 
-#: app/templates/_home_loan.html:234
-msgid "Mortgage Percentage"
-msgstr "按揭百分比"
+#: app/templates/_home_affordability.html:123
+msgid "Family Monthly Income"
+msgstr "家庭月收入"
 
-#: app/templates/_home_loan.html:236 app/templates/_home_loan.html:275
-#: app/templates/_home_loan.html:286
-msgid "Select a option"
-msgstr "请选择"
+#: app/templates/_home_affordability.html:133
+msgid "Family Monthly Spending"
+msgstr "家庭月支出"
 
-#: app/templates/_home_loan.html:237 app/templates/_home_loan.html:238
-#: app/templates/_home_loan.html:239 app/templates/_home_loan.html:240
-#: app/templates/_home_loan.html:241 app/templates/_home_loan.html:242
-#: app/templates/_home_loan.html:243 app/templates/_home_loan.html:244
-#: app/templates/_home_loan.html:245
-msgid "Percent"
-msgstr "成"
+#: app/templates/_home_affordability.html:143
+msgid "Repay Loan Period"
+msgstr "预计偿还贷款的年限"
 
-#: app/templates/_home_loan.html:273
-msgid "Mortgage Year"
-msgstr "按揭年限"
-
-#: app/templates/_home_loan.html:276 app/templates/_home_loan.html:277
-#: app/templates/_home_loan.html:278 app/templates/_home_loan.html:287
-#: app/templates/_home_loan.html:292
+#: app/templates/_home_affordability.html:146
+#: app/templates/_home_affordability.html:147
+#: app/templates/_home_affordability.html:148 app/templates/_home_loan.html:278
+#: app/templates/_home_loan.html:279 app/templates/_home_loan.html:280
+#: app/templates/_home_loan.html:289 app/templates/_home_loan.html:294
+#: app/templates/_prepayment.html:134 app/templates/_prepayment.html:135
+#: app/templates/_prepayment.html:136 app/templates/_prepayment.html:156
+#: app/templates/_prepayment.html:187
+#: app/templates/_public_accumulation_funds.html:190
 msgid "Year"
 msgstr "年"
 
-#: app/templates/_home_loan.html:276 app/templates/_home_loan.html:277
-#: app/templates/_home_loan.html:278
+#: app/templates/_home_affordability.html:146
+#: app/templates/_home_affordability.html:147
+#: app/templates/_home_affordability.html:148 app/templates/_home_loan.html:278
+#: app/templates/_home_loan.html:279 app/templates/_home_loan.html:280
+#: app/templates/_prepayment.html:134 app/templates/_prepayment.html:135
+#: app/templates/_prepayment.html:136
 msgid "Periods"
 msgstr "期"
 
-#: app/templates/_home_loan.html:288 app/templates/_home_loan.html:289
-#: app/templates/_home_loan.html:290 app/templates/_home_loan.html:293
-#: app/templates/_home_loan.html:294 app/templates/_home_loan.html:295
-msgid "Month"
-msgstr "月"
+#: app/templates/_home_affordability.html:155
+msgid "House Purchase Area"
+msgstr "预计购买房屋的面积"
 
-#: app/templates/_home_loan.html:288 app/templates/_home_loan.html:289
-#: app/templates/_home_loan.html:290 app/templates/_home_loan.html:293
-#: app/templates/_home_loan.html:294 app/templates/_home_loan.html:295
-msgid "Day"
-msgstr "日"
+#: app/templates/_home_affordability.html:159
+#: app/templates/_home_affordability.html:194
+#: app/templates/_home_affordability.html:203 app/templates/_home_loan.html:220
+#: app/templates/_home_loan.html:230
+msgid "Square Meter"
+msgstr "平米"
 
-#: app/templates/_home_loan.html:288 app/templates/_home_loan.html:289
-#: app/templates/_home_loan.html:290 app/templates/_home_loan.html:293
-#: app/templates/_home_loan.html:294 app/templates/_home_loan.html:295
-msgid "Base Rate"
-msgstr "基础利率"
-
-#: app/templates/_home_loan.html:302
-msgid "Repayment Mode"
-msgstr "支付模式"
-
-#: app/templates/_home_loan.html:304
-msgid "Fixed-payment Mortgage"
-msgstr "等额本息"
-
-#: app/templates/_home_loan.html:304
-msgid "Fixed-basis Mortgage"
-msgstr "等额本金"
-
-#: app/templates/_home_loan.html:312
+#: app/templates/_home_affordability.html:168 app/templates/_home_loan.html:314
+#: app/templates/_prepayment.html:250
+#: app/templates/_public_accumulation_funds.html:220
 msgid "Reset"
 msgstr "重置"
 
-#: app/templates/_home_loan.html:313 app/templates/index.html:5
+#: app/templates/_home_affordability.html:169 app/templates/_home_loan.html:315
+#: app/templates/_prepayment.html:251
+#: app/templates/_public_accumulation_funds.html:221 app/templates/index.html:5
 msgid "Calculate"
 msgstr "计算"
 
-#: app/templates/_home_loan.html:328
+#: app/templates/_home_affordability.html:184 app/templates/_home_loan.html:330
+#: app/templates/_prepayment.html:266
+#: app/templates/_public_accumulation_funds.html:236
 msgid "Show The Result Of Calculation"
 msgstr "查看计算结果"
 
-#: app/templates/_home_loan.html:334
+#: app/templates/_home_affordability.html:190
+msgid "The Max Purchase Area"
+msgstr "购买房屋的最大面积"
+
+#: app/templates/_home_affordability.html:199
+msgid "The House Unit Price"
+msgstr "购买房屋的单价"
+
+#: app/templates/_home_affordability.html:208
+msgid "The Purchase Home Total Price "
+msgstr "购买房屋的总价"
+
+#: app/templates/_home_affordability.html:220 app/templates/_home_loan.html:405
+#: app/templates/_prepayment.html:337
+#: app/templates/_public_accumulation_funds.html:254
+msgid "Close"
+msgstr "关闭"
+
+#: app/templates/_home_loan.html:185
+msgid "Loan Calculation"
+msgstr "贷款计算"
+
+#: app/templates/_home_loan.html:187 app/templates/_home_loan.html:286
+msgid "Loan Type"
+msgstr "贷款类型"
+
+#: app/templates/_home_loan.html:192
+msgid "Business"
+msgstr "商业贷款"
+
+#: app/templates/_home_loan.html:196 app/templates/index.html:92
+msgid "Public Accumulation Funds"
+msgstr "公积金贷款"
+
+#: app/templates/_home_loan.html:200
+msgid "Mixture"
+msgstr "组合型贷款"
+
+#: app/templates/_home_loan.html:206
+msgid "Compute Mode"
+msgstr "计算模式"
+
+#: app/templates/_home_loan.html:208
+msgid "Area & Price"
+msgstr "面积、单价"
+
+#: app/templates/_home_loan.html:208 app/templates/_home_loan.html:261
+msgid "Total Loan"
+msgstr "贷款总额"
+
+#: app/templates/_home_loan.html:216
+msgid "Area"
+msgstr "面积"
+
+#: app/templates/_home_loan.html:226
+msgid "Unit Price"
+msgstr "单价"
+
+#: app/templates/_home_loan.html:236
+msgid "Mortgage Percentage"
+msgstr "按揭百分比"
+
+#: app/templates/_home_loan.html:238 app/templates/_home_loan.html:277
+#: app/templates/_home_loan.html:288
+msgid "Select a option"
+msgstr "请选择"
+
+#: app/templates/_home_loan.html:239 app/templates/_home_loan.html:240
+#: app/templates/_home_loan.html:241 app/templates/_home_loan.html:242
+#: app/templates/_home_loan.html:243 app/templates/_home_loan.html:244
+#: app/templates/_home_loan.html:245 app/templates/_home_loan.html:246
+#: app/templates/_home_loan.html:247
+msgid "Percent"
+msgstr "成"
+
+#: app/templates/_home_loan.html:275
+msgid "Mortgage Year"
+msgstr "按揭年限"
+
+#: app/templates/_home_loan.html:290 app/templates/_home_loan.html:291
+#: app/templates/_home_loan.html:292 app/templates/_home_loan.html:295
+#: app/templates/_home_loan.html:296 app/templates/_home_loan.html:297
+#: app/templates/_prepayment.html:171 app/templates/_prepayment.html:202
+msgid "Month"
+msgstr "月"
+
+#: app/templates/_home_loan.html:290 app/templates/_home_loan.html:291
+#: app/templates/_home_loan.html:292 app/templates/_home_loan.html:295
+#: app/templates/_home_loan.html:296 app/templates/_home_loan.html:297
+msgid "Day"
+msgstr "日"
+
+#: app/templates/_home_loan.html:290 app/templates/_home_loan.html:291
+#: app/templates/_home_loan.html:292 app/templates/_home_loan.html:295
+#: app/templates/_home_loan.html:296 app/templates/_home_loan.html:297
+msgid "Base Rate"
+msgstr "基础利率"
+
+#: app/templates/_home_loan.html:304
+msgid "Repayment Mode"
+msgstr "支付模式"
+
+#: app/templates/_home_loan.html:306
+msgid "Fixed-payment Mortgage"
+msgstr "等额本息"
+
+#: app/templates/_home_loan.html:306
+msgid "Fixed-basis Mortgage"
+msgstr "等额本金"
+
+#: app/templates/_home_loan.html:336
 msgid "Home Total Nums"
 msgstr "房款总额"
 
-#: app/templates/_home_loan.html:343
+#: app/templates/_home_loan.html:345 app/templates/_prepayment.html:279
 msgid "Loan Total Nums"
 msgstr "贷款总额"
 
-#: app/templates/_home_loan.html:352
+#: app/templates/_home_loan.html:354 app/templates/_prepayment.html:288
 msgid "Replayment Total Nums"
 msgstr "还款总额"
 
-#: app/templates/_home_loan.html:362
+#: app/templates/_home_loan.html:364 app/templates/_prepayment.html:298
 msgid "Payment Interest"
 msgstr "支付利息"
 
-#: app/templates/_home_loan.html:372
+#: app/templates/_home_loan.html:374 app/templates/_prepayment.html:308
 msgid "Initial Payment"
 msgstr "首付"
 
-#: app/templates/_home_loan.html:383
+#: app/templates/_home_loan.html:385 app/templates/_prepayment.html:319
 msgid "Terms Duration of Loan"
 msgstr "贷款月数"
 
-#: app/templates/_home_loan.html:390
+#: app/templates/_home_loan.html:392 app/templates/_prepayment.html:326
 msgid "Average Monthly Repayment"
 msgstr "月均还款"
 
-#: app/templates/_home_loan.html:403
-msgid "Close"
-msgstr "关闭"
+#: app/templates/_prepayment.html:110
+msgid "Prepayment Calculation"
+msgstr "提前还贷计算"
+
+#: app/templates/_prepayment.html:113
+msgid "Loan Mode"
+msgstr "贷款类型"
+
+#: app/templates/_prepayment.html:115
+msgid "Commercial"
+msgstr "商业"
+
+#: app/templates/_prepayment.html:115 app/templates/index.html:5
+#: app/templates/index.html:130
+msgid "Loan"
+msgstr "贷款"
+
+#: app/templates/_prepayment.html:115
+msgid "Fund"
+msgstr "公积金"
+
+#: app/templates/_prepayment.html:121
+msgid "Original Loan Principal"
+msgstr "原贷款金额"
+
+#: app/templates/_prepayment.html:131
+msgid "Original Loan Period"
+msgstr "原贷款年限"
+
+#: app/templates/_prepayment.html:141
+#: app/templates/_public_accumulation_funds.html:186
+msgid "Loan Period"
+msgstr "贷款申请年限"
+
+#: app/templates/_prepayment.html:147
+msgid "First Repayment"
+msgstr "第一次还款时间"
+
+#: app/templates/_prepayment.html:178
+msgid "Expected Prepayment"
+msgstr "预计提前还款时间"
+
+#: app/templates/_prepayment.html:215
+msgid "Prepayment Mode"
+msgstr "提前还款方式"
+
+#: app/templates/_prepayment.html:217
+msgid "All"
+msgstr "所有"
+
+#: app/templates/_prepayment.html:217
+msgid "Part"
+msgstr "部分"
+
+#: app/templates/_prepayment.html:226
+msgid "Prepayment Money"
+msgstr "部分提前还款金额"
+
+#: app/templates/_prepayment.html:240
+msgid "Handle Mode"
+msgstr "处理方式"
+
+#: app/templates/_prepayment.html:242
+msgid "Short Repayment Period"
+msgstr "缩短还款期限,月还款额基本不变"
+
+#: app/templates/_prepayment.html:242
+msgid "Reduce Monthly Payment"
+msgstr "减少月还款额,还款期限不变"
+
+#: app/templates/_prepayment.html:270
+msgid "Past Monthly"
+msgstr "过去每月"
+
+#: app/templates/_prepayment.html:270
+msgid "Payment Money"
+msgstr "还款金额"
+
+#: app/templates/_public_accumulation_funds.html:104
+msgid "Public Accumulation Funds Loan Limit Calculation"
+msgstr "公积金贷款限制计算"
+
+#: app/templates/_public_accumulation_funds.html:107
+msgid "Marital Status"
+msgstr "婚姻状态"
+
+#: app/templates/_public_accumulation_funds.html:109
+msgid "Single"
+msgstr "单身"
+
+#: app/templates/_public_accumulation_funds.html:109
+msgid "Married"
+msgstr "已婚"
+
+#: app/templates/_public_accumulation_funds.html:118
+msgid "Personal"
+msgstr "个人"
+
+#: app/templates/_public_accumulation_funds.html:118
+#: app/templates/_public_accumulation_funds.html:145
+msgid "Monthly Deposit"
+msgstr "月缴存额"
+
+#: app/templates/_public_accumulation_funds.html:128
+#: app/templates/_public_accumulation_funds.html:155
+msgid "Deposit Ratio"
+msgstr "缴纳百分比"
+
+#: app/templates/_public_accumulation_funds.html:145
+msgid "Spouse"
+msgstr "配偶"
+
+#: app/templates/_public_accumulation_funds.html:169
+msgid "Home Estimated Price"
+msgstr "房屋预估价格"
+
+#: app/templates/_public_accumulation_funds.html:179
+msgid "Room Type"
+msgstr "房屋性质"
+
+#: app/templates/_public_accumulation_funds.html:181
+msgid "Policy-related"
+msgstr "政策性住房"
+
+#: app/templates/_public_accumulation_funds.html:181
+#: app/templates/_public_accumulation_funds.html:211
+msgid "Other"
+msgstr "其它"
+
+#: app/templates/_public_accumulation_funds.html:198
+msgid "Credit Ratings"
+msgstr "信用等级"
+
+#: app/templates/_public_accumulation_funds.html:242
+msgid "Your The Highest Credit Line"
+msgstr "您的最高贷款额度是"
+
+#: app/templates/_public_accumulation_funds.html:246
+msgid "Ten Thousand"
+msgstr "万"
 
 #: app/templates/index.html:5
 msgid "House"
@@ -194,10 +406,6 @@ msgstr "能力"
 #: app/templates/index.html:5
 msgid "Funds"
 msgstr "公积金"
-
-#: app/templates/index.html:5 app/templates/index.html:130
-msgid "Loan"
-msgstr "贷款"
 
 #: app/templates/index.html:6
 msgid "Calculate Loan"
@@ -238,5 +446,4 @@ msgstr "所有权限保留"
 #: app/templates/index.html:130
 msgid "Designed by"
 msgstr "设计者"
-
 

@@ -4,8 +4,6 @@
         var spouse_monthly_deposit = $('#spouse-for-monthly-deposit');
         $("input[name='marital-status']")
                 .bootstrapSwitch({
-                    onText: 'Single',
-                    offText: 'Married',
                     size:'normal',
                     onColor:'primary',
                     offColor:'info'
@@ -20,13 +18,10 @@
                 })
                 .end();
         $("[name='room-type']").bootstrapSwitch({
-            //等额本息
-            onText: 'Policy-related',
-            //等额本金
-            offText: 'Other',
             size:'normal',
             onColor:'primary',
-            offColor:'info'
+            offColor:'info',
+            handleWidth: 100
         });
         $('#publicAccumulationFundsLoanLimitCalculatedForm')
                 .bootstrapValidator({
@@ -106,12 +101,12 @@
 </script>
 <form id="publicAccumulationFundsLoanLimitCalculatedForm" class="form-horizontal" action="{{ url_for('main.calculate_public_accumulation_funds_loan') }}" method="post">
     <div class="panel panel-default">
-        <div class="panel-heading text-center"><h3>Public Accumulation Funds Loan Limit Calculation</h3></div>
+        <div class="panel-heading text-center"><h3>{{ _('Public Accumulation Funds Loan Limit Calculation') }}</h3></div>
 
         <div class="form-group" data-toggle="tooltip" title="Marital Status" style="margin-top: 20px;">
-            <label for="inputMaritalStatus" class="col-sm-2 control-label">Marital Status</label>
+            <label for="inputMaritalStatus" class="col-sm-2 control-label">{{ _('Marital Status') }}</label>
             <div class="col-sm-9">
-                <input id="inputMaritalStatus" name="marital-status" checked type="checkbox" />
+                <input id="inputMaritalStatus" name="marital-status" checked type="checkbox" data-on-text="{{ _('Single') }}" data-off-text="{{ _('Married') }}" />
             </div>
         </div>
         <div class="form-group" id="single-for-monthly-deposit">
@@ -120,16 +115,22 @@
                     <div class="panel-body">
                         <!--个人每月的存款-->
                         <div class="form-group" data-toggle="tooltip" title="Personal Monthly Deposit">
-                            <label for="inputPersonalMonthlyDeposit" class="col-sm-2 control-label">Personal Monthly Deposit</label>
+                            <label for="inputPersonalMonthlyDeposit" class="col-sm-2 control-label">{{ _('Personal') }}{{ _('Monthly Deposit') }}</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="inputPersonalMonthlyDeposit" name="personal-monthly-deposit">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="inputPersonalMonthlyDeposit" name="personal-monthly-deposit" aria-describedby="inputPersonalMonthlyDeposit-Addon">
+                                    <span class="input-group-addon" id="inputPersonalMonthlyDeposit-Addon">{{ _('Yuan') }}</span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group" data-toggle="tooltip" title="Deposit Ratio">
                             <!--缴纳百分比-->
-                            <label for="inputPersonalDepositRatio" class="col-sm-2 control-label">Deposit Ratio</label>
+                            <label for="inputPersonalDepositRatio" class="col-sm-2 control-label">{{ _('Deposit Ratio') }}</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="inputPersonalDepositRatio" name="personal-deposit-ratio">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="inputPersonalDepositRatio" name="personal-deposit-ratio" aria-describedby="inputPersonalDepositRatio-Addon">
+                                    <span class="input-group-addon" id="inputPersonalDepositRatio-Addon">%</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -141,16 +142,22 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <div class="form-group" data-toggle="tooltip" title="Spouse Monthly Deposit">
-                            <label for="inputSpouseMonthlyDeposit" class="col-sm-2 control-label">Spouse Monthly Deposit</label>
+                            <label for="inputSpouseMonthlyDeposit" class="col-sm-2 control-label">{{ _('Spouse') }}{{ _('Monthly Deposit') }}</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="inputSpouseMonthlyDeposit" name="spouse-monthly-deposit">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="inputSpouseMonthlyDeposit" name="spouse-monthly-deposit" aria-describedby="inputSpouseMonthlyDeposit-Addon">
+                                    <span class="input-group-addon" id="inputSpouseMonthlyDeposit-Addon">{{ _('Yuan') }}</span>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group" data-toggle="tooltip" title="Deposit Ratio">
                             <!--缴纳百分比-->
-                            <label for="inputSpouseDepositRatio" class="col-sm-2 control-label">Deposit Ratio</label>
+                            <label for="inputSpouseDepositRatio" class="col-sm-2 control-label">{{ _('Deposit Ratio') }}</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="inputSpouseDepositRatio" name="spouse-deposit-ratio">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="inputSpouseDepositRatio" name="spouse-deposit-ratio" aria-describedby="inputSpouseDepositRatio-Addon">
+                                    <span class="input-group-addon" id="inputSpouseDepositRatio-Addon">%</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -159,30 +166,36 @@
         </div>
         <!--房屋评估价值或实际购房款-->
         <div class="form-group" data-toggle="tooltip" title="Total Loan">
-            <label for="inputHomeEstimatedPrice" class="col-sm-2 control-label">Home Estimated Price</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="inputHomeEstimatedPrice" name="home-estimated-price">
+            <label for="inputHomeEstimatedPrice" class="col-sm-2 control-label">{{ _('Home Estimated Price') }}</label>
+            <div class="col-sm-7">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="inputHomeEstimatedPrice" name="home-estimated-price" aria-describedby="inputHomeEstimatedPrice-Addon">
+                    <span class="input-group-addon" id="inputHomeEstimatedPrice-Addon">{{ _('Yuan') }}</span>
+                </div>
             </div>
         </div>
         <!--房屋性质-->
         <div class="form-group" data-toggle="tooltip" title="Repayment Mode">
-            <label for="inputRoomType" class="col-sm-2 control-label">Room Type</label>
+            <label for="inputRoomType" class="col-sm-2 control-label">{{ _('Room Type') }}</label>
             <div class="col-sm-9">
-                <input id="inputRoomType" name="room-type" checked type="checkbox" />
+                <input id="inputRoomType" name="room-type" checked type="checkbox" data-on-text="{{ _('Policy-related') }}" data-off-text="{{ _('Other') }}" />
             </div>
         </div>
         <!--贷款年限-->
         <div class="form-group" data-toggle="tooltip" title="Loan Period">
-            <label for="inputPeriodApplyForLoan" class="col-sm-2 control-label">Loan Period</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="inputPeriodApplyForLoan" name="loan-period">
+            <label for="inputPeriodApplyForLoan" class="col-sm-2 control-label">{{ _('Loan Period') }}</label>
+            <div class="col-sm-7">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="inputPeriodApplyForLoan" name="loan-period" aria-describedby="inputPeriodApplyForLoan-Addon">
+                    <span class="input-group-addon" id="inputPeriodApplyForLoan-Addon">{{ _('Year') }}</span>
+                </div>
             </div>
         </div>
 
 
         <!--个人信用等级-->
         <div class="form-group" data-toggle="tooltip" title="Loan Type" style="margin-top: 20px;">
-            <label for="inputPersonCreditRatings" class="col-sm-2 control-label">Credit Ratings</label>
+            <label for="inputPersonCreditRatings" class="col-sm-2 control-label">{{ _('Credit Ratings') }}</label>
             <div class="col-sm-9">
                 <ul id="inputPersonCreditRatings" class="list-group" style="list-style: none">
                     <li>
@@ -195,7 +208,7 @@
                     </li>
                     <li>
                         <input tabindex="3" type="radio" id="credit-rating-other" name="credit-ratings">
-                        <label for="mixture-loan">Other</label>
+                        <label for="mixture-loan">{{ _('Other') }}</label>
                     </li>
                 </ul>
             </div>
@@ -204,8 +217,8 @@
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-9">
                     <div class="btn-toolbar pull-right">
-                        <button type="reset" class="btn btn-primary">Reset</button>
-                        <button type="submit" class="btn btn-primary">Calculate</button>
+                        <button type="reset" class="btn btn-primary">{{ _('Reset') }}</button>
+                        <button type="submit" class="btn btn-primary">{{ _('Calculate') }}</button>
                     </div>
 
                 </div>
@@ -220,23 +233,25 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Show The Result Of Calculation</h4>
+                <h4 class="modal-title">{{ _('Show The Result Of Calculation') }}</h4>
             </div>
             <div class="modal-body">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <div class="form-group row">
-                            <label for="inputYourTheHighestCreditLine" class="col-sm-3 control-label">Your The Highest Credit Line</label>
-                            <div class="col-sm-8">
-                                <input type="text" readonly class="form-control" id="inputYourTheHighestCreditLine" name="your-the-highest-credit-line">
+                        <div class="form-group row" style="margin-top: 20px;">
+                            <label for="inputYourTheHighestCreditLine" class="col-sm-4 control-label">{{ _('Your The Highest Credit Line') }}</label>
+                            <div class="col-sm-7">
+                                <div class="input-group">
+                                    <input type="text" readonly class="form-control" id="inputYourTheHighestCreditLine" name="your-the-highest-credit-line" aria-describedby="inputYourTheHighestCreditLine-Addon">
+                                    <span class="input-group-addon" id="inputYourTheHighestCreditLine-Addon">{{ _('Ten Thousand') }}{{ _('Yuan') }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Print</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{ _('Close') }}</button>
                 <div class="export btn-group dropup">
                     <button class="btn btn-default dropdown-toggle" aria-label="export type" title="Export data" data-toggle="dropdown" type="button">
                         <i class="glyphicon glyphicon-export icon-share"></i>
