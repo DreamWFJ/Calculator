@@ -7,3 +7,6 @@
     bootstrap3, jquery, i18n, flask
 ### 测试地址
     http://59.110.235.45/
+### 注意
+    浏览器支持：谷歌，火狐，IE
+
